@@ -3,15 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0b100b" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="description" content="Registo de todos os resultados eleitorais verdadeiros e oficiais da CNA.">
 <title>Verdade Eleitoral</title>
 <link rel="icon" href="img/favicon.ico" sizes="any">
 <link rel="icon" href="img/favicon.png" type="image/png">
 <link rel="stylesheet" href="css/site.css">
+<script src="js/tema.js"></script>
 <script type="module" src="js/main.js"></script>
 </head>
 <body>
@@ -19,11 +18,10 @@
 <header class="topo">
   <div class="miolo">
     <a class="marca" href="#/" aria-label="Verdade Eleitoral, página inicial">
-      <picture>
-        <source srcset="img/logo-escuro.png" media="(prefers-color-scheme: dark)">
-        <img src="img/logo.png" alt="Verdade Eleitoral" width="504" height="167">
-      </picture>
+      <img class="logo-claro" src="img/logo.png" alt="Verdade Eleitoral" width="504" height="167" loading="lazy">
+      <img class="logo-escuro" src="img/logo-escuro.png" alt="" width="504" height="167" loading="lazy">
     </a>
+    <button id="tema" class="botao-tema" type="button">Modo escuro</button>
   </div>
 </header>
 <main id="conteudo" class="miolo" tabindex="-1">
