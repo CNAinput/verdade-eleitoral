@@ -4,12 +4,21 @@
       "nome": "Eleições Presidenciais",
       "cargo": "Presidente da CNA",
       "artigo": "o"
+    },
+    "referendo": {
+      "nome": "Referendo",
+      "formato": "opcoes"
     }
+  },
+  "respostas": {
+    "Sim": { "cor": "#2b8a3e" },
+    "Não": { "cor": "#d32f2f" }
   },
   "partidos": {
     "PC": { "cor": "#d32f2f" },
     "PL": { "cor": "#1d3f9e" },
-    "PE": { "cor": "#2b8a3e" }
+    "PE": { "cor": "#2b8a3e" },
+    "PR-PE": { "cor": "#d9640a" }
   },
   "fotos": {
     "KingBJ": "img/candidatos/kingbj.png",
@@ -46,6 +55,41 @@
         { "nome": "Chip_12", "partido": "PL", "primeira_escolha": 4, "pontos": 20 }
       ],
       "notas": ["A 2ª escolha é o contrário."]
+    },
+    {
+      "id": "presidenciais-2024",
+      "tipo": "presidenciais",
+      "ano": 2024,
+      "sistema": "votos",
+      "inscritos": 95,
+      "candidatos": [
+        { "nome": "KingBJ", "partido": "PC", "votos": 52, "eleito": true },
+        { "nome": "batata.j22", "partido": "PL", "votos": 40 }
+      ],
+      "outros": [{ "nome": "Não compareceu", "votos": 3, "unidade": "votante" }]
+    },
+    {
+      "id": "presidenciais-2023",
+      "tipo": "presidenciais",
+      "ano": 2023,
+      "sistema": "votos",
+      "candidatos": [
+        { "nome": "KingBJ", "partido": "PC", "votos": 41, "eleito": true },
+        { "nome": "batata.j22", "partido": "PR-PE", "votos": 14 }
+      ],
+      "outros": [{ "nome": "Em falta, em branco ou ilegais", "votos": 9 }]
+    },
+    {
+      "id": "referendo-2025-06-23",
+      "tipo": "referendo",
+      "ano": 2025,
+      "data": "2025-06-23",
+      "pergunta": "Na nova constituição: o Presidente deve ter pelo menos 50% dos votos válidos para ser eleito? Se nenhum candidato obter 50% na primeira ronda, irá se realizar uma segunda com os dois mais votados.",
+      "opcoes": [
+        { "nome": "Sim", "votos": 5 },
+        { "nome": "Não", "votos": 2 },
+        { "nome": "Branco/NS/NR", "votos": 1, "branco": true }
+      ]
     }
   ]
 }

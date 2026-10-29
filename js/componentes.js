@@ -25,8 +25,18 @@ function ordenados(e, campo) {
   return [...e.candidatos].sort((a, b) => b[campo] - a[campo]);
 }
 
+function votosOutros(e) {
+  return (e.outros || []).reduce((soma, o) => soma + o.votos, 0);
+}
+
+// Nos votos, o total inclui o que está fora da barra.
 function total(e, campo) {
-  return e.candidatos.reduce((soma, c) => soma + c[campo], 0);
+  const candidatos = e.candidatos.reduce((soma, c) => soma + c[campo], 0);
+  return campo === "votos" ? candidatos + votosOutros(e) : candidatos;
+}
+
+function campoPrincipal(e) {
+  return e.sistema === "votos" ? "votos" : "pontos";
 }
 
 function textoValor(c, campo, unidade, base) {
@@ -118,17 +128,24 @@ function ladoDuelo(c, campo, unidade, base) {
   );
 }
 
-// Uma só barra para dois candidatos.
-function duelo(e, campo, unidade) {
-  const lados = ordenados(e, "pontos");
-  const base = total(e, campo);
-  const segmentos = lados.map((c) => {
+// Segmentos proporcionais, um por item.
+function segmentosDe(itens) {
+  const base = itens.reduce((soma, i) => soma + i.valor, 0);
+  const segmentos = itens.map((i) => {
     const segmento = h("span", { class: "segmento" });
-    colorir(segmento, c.cor);
-    segmento.style.flexGrow = String(base > 0 ? c[campo] : 1);
+    colorir(segmento, i.cor);
+    segmento.style.flexGrow = String(base > 0 ? i.valor : 1);
     return segmento;
   });
-  marcarRepetidas(lados, segmentos);
+  marcarRepetidas(itens, segmentos);
+  return segmentos;
+}
+
+// Uma só barra para dois candidatos.
+function duelo(e, campo, unidade) {
+  const lados = ordenados(e, campoPrincipal(e));
+  const base = total(e, campo);
+  const segmentos = segmentosDe(lados.map((c) => ({ cor: c.cor, valor: c[campo] })));
   return h(
     "div",
     { class: "duelo" },
@@ -143,16 +160,95 @@ export function grafico(e, campo, unidade) {
   return e.candidatos.length === 2 ? duelo(e, campo, unidade) : barras(e, campo, unidade);
 }
 
-// Barra compacta repartida pelos pontos.
+// Votos que não são de nenhum candidato.
+export function listaOutros(e) {
+  const base = total(e, "votos");
+  const fora = e.candidatos.length === 2;
+  return h(
+    "ul",
+    { class: "brancos" },
+    e.outros.map((o) => {
+      const unidade = o.unidade || "voto";
+      const texto = `${o.nome}: ${inteiro(o.votos)} ${plural(o.votos, [unidade, `${unidade}s`])} (${percentagem(o.votos, base)})`;
+      return h("li", {}, texto, fora && " ", fora && h("span", { class: "muted" }, "(fora da barra)"));
+    }),
+  );
+}
+
+export function totalDeVotos(e) {
+  return total(e, "votos");
+}
+
+export function linhaTotalVotos(e) {
+  return e.inscritos ? `Inscritos: ${inteiro(e.inscritos)}.` : `Total de votos: ${inteiro(total(e, "votos"))}.`;
+}
+
+export function textoTotalCandidatos(e) {
+  if (e.inscritos) return `${inteiro(e.inscritos)} inscritos`;
+  const base = total(e, "votos");
+  return `${inteiro(base)} ${plural(base, VOTOS)} no total`;
+}
+
+// Barra compacta: pontos ou opções do referendo.
 export function divisao(e) {
-  const base = total(e, "pontos");
-  const lados = ordenados(e, "pontos");
-  const segmentos = lados.map((c) => {
-    const segmento = h("span", { class: "segmento" });
-    colorir(segmento, c.cor);
-    segmento.style.flexGrow = String(base > 0 ? c.pontos : 1);
-    return segmento;
-  });
-  marcarRepetidas(lados, segmentos);
-  return h("div", { class: "divisao-caixa" }, h("div", { class: "divisao", "aria-hidden": "true" }, segmentos), marcaMaioria(false));
+  const itens =
+    e.formato === "opcoes"
+      ? opcoesNaBarra(e).map((o) => ({ cor: o.cor, valor: o.votos }))
+      : ordenados(e, campoPrincipal(e)).map((c) => ({ cor: c.cor, valor: c[campoPrincipal(e)] }));
+  return h("div", { class: "divisao-caixa" }, h("div", { class: "divisao", "aria-hidden": "true" }, segmentosDe(itens)), marcaMaioria(false));
+}
+
+function opcoesNaBarra(e) {
+  return e.opcoes.filter((o) => !o.branco);
+}
+
+function votosTotais(e) {
+  return e.opcoes.reduce((soma, o) => soma + o.votos, 0);
+}
+
+function textoOpcao(o, base) {
+  return `${inteiro(o.votos)} ${plural(o.votos, VOTOS)} (${percentagem(o.votos, base)})`;
+}
+
+export function textoTotalVotos(e) {
+  const base = votosTotais(e);
+  return `${inteiro(base)} ${plural(base, VOTOS)} no total`;
+}
+
+export function fraseOpcao(e) {
+  const naBarra = opcoesNaBarra(e);
+  if (naBarra.length === 0) return "Sem resultado registado.";
+  const maximo = Math.max(...naBarra.map((o) => o.votos));
+  const lideres = naBarra.filter((o) => o.votos === maximo);
+  if (lideres.length > 1) {
+    return `Empate entre ${lideres.map((o) => o.nome).join(" e ")}, com ${inteiro(maximo)} ${plural(maximo, VOTOS)} cada.`;
+  }
+  return `Opção mais votada: ${lideres[0].nome}, com ${textoOpcao(lideres[0], votosTotais(e))}.`;
+}
+
+// Uma só barra: o branco fica de fora.
+export function graficoReferendo(e) {
+  const base = votosTotais(e);
+  const naBarra = opcoesNaBarra(e);
+  const brancos = e.opcoes.filter((o) => o.branco);
+  const segmentos = segmentosDe(naBarra.map((o) => ({ cor: o.cor, valor: o.votos })));
+  return h(
+    "div",
+    { class: "referendo" },
+    h("div", { class: "duelo-meio" }, h("div", { class: "duelo-barra", "aria-hidden": "true" }, segmentos), marcaMaioria(true)),
+    h(
+      "ul",
+      { class: "duelo-lados" },
+      naBarra.map((o) =>
+        h("li", { class: "duelo-lado" }, h("span", { class: "barra-nome" }, o.nome), h("span", { class: "barra-valor" }, textoOpcao(o, base))),
+      ),
+    ),
+    brancos.length > 0 &&
+      h(
+        "ul",
+        { class: "brancos" },
+        brancos.map((o) => h("li", {}, `${o.nome}: ${textoOpcao(o, base)} `, h("span", { class: "muted" }, "(fora da barra)"))),
+      ),
+    h("p", { class: "total-votos muted" }, `Total de votos: ${inteiro(base)}.`),
+  );
 }

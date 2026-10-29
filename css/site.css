@@ -473,6 +473,43 @@ a:hover {
   text-align: right;
 }
 
+/* Referendo */
+.pergunta {
+  margin: 0 0 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  line-height: 1.45;
+}
+
+.referendo {
+  padding-top: 0.9rem;
+}
+
+.brancos {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.total-votos {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+
+.cartao-pergunta {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0.1rem 0 0.35rem;
+  color: var(--texto-2);
+  font-size: 0.95rem;
+}
+
 /* Última eleição */
 .destaque {
   background: var(--superficie);

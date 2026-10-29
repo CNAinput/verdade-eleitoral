@@ -1,5 +1,16 @@
 import { h } from "./dom.js";
-import { fraseVencedor, grafico, pista, PONTOS, selo, VOTOS } from "./componentes.js";
+import {
+  fraseOpcao,
+  fraseVencedor,
+  grafico,
+  graficoReferendo,
+  linhaTotalVotos,
+  listaOutros,
+  pista,
+  PONTOS,
+  selo,
+  VOTOS,
+} from "./componentes.js";
 import { inteiro, percentagem } from "./formato.js";
 
 function estatistica(parte, total, legenda) {
@@ -23,32 +34,70 @@ function vizinha(e, sentido) {
   );
 }
 
-export function paginaEleicao(dados, id) {
-  const e = dados.porId.get(id);
-  if (!e) return null;
+function vizinhas(e) {
+  if (!e.anterior && !e.seguinte) return null;
+  return h(
+    "nav",
+    { class: "vizinhas", "aria-label": "Outras eleições do mesmo tipo" },
+    vizinha(e.anterior, "anterior"),
+    vizinha(e.seguinte, "seguinte"),
+  );
+}
+
+function quadro(id, titulo, ...filhos) {
+  return h("section", { class: "quadro", "aria-labelledby": id }, h("h2", { id }, titulo), filhos);
+}
+
+function bannerVencedor(e) {
+  return h("p", { class: "vencedor" }, e.eleitos.length > 0 && selo("Eleito"), h("span", {}, fraseVencedor(e)));
+}
+
+function pagina(e, ...blocos) {
   const no = h(
     "article",
     {},
     h("p", { class: "migalhas" }, h("a", { href: "#/" }, "← Todas as eleições")),
     h("p", { class: "sobretitulo" }, "Resultado"),
     h("h1", {}, e.titulo),
-    h("p", { class: "vencedor" }, e.eleitos.length > 0 && selo("Eleito"), h("span", {}, fraseVencedor(e))),
-    h(
-      "section",
-      { class: "quadro", "aria-labelledby": "titulo-primeira" },
-      h("h2", { id: "titulo-primeira" }, "Como 1ª escolha"),
-      grafico(e, "primeira_escolha", VOTOS),
+    blocos,
+    (e.notas || []).length > 0 && h("ul", { class: "notas" }, e.notas.map((nota) => h("li", {}, nota))),
+    vizinhas(e),
+  );
+  return { titulo: e.titulo, no };
+}
+
+function paginaReferendo(e) {
+  return pagina(
+    e,
+    h("p", { class: "pergunta" }, e.pergunta),
+    h("p", { class: "vencedor" }, h("span", {}, fraseOpcao(e))),
+    quadro("titulo-resultado", "Votos", graficoReferendo(e)),
+  );
+}
+
+function paginaVotos(e) {
+  return pagina(
+    e,
+    bannerVencedor(e),
+    quadro(
+      "titulo-votos",
+      "Votos",
+      grafico(e, "votos", VOTOS),
+      (e.outros || []).length > 0 && listaOutros(e),
+      h("p", { class: "total-votos muted" }, linhaTotalVotos(e)),
     ),
-    h(
-      "section",
-      { class: "quadro", "aria-labelledby": "titulo-pontos" },
-      h("h2", { id: "titulo-pontos" }, "Pontos"),
-      grafico(e, "pontos", PONTOS),
-    ),
-    h(
-      "section",
-      { class: "quadro", "aria-labelledby": "titulo-participacao" },
-      h("h2", { id: "titulo-participacao" }, "Participação"),
+  );
+}
+
+function paginaPontos(e) {
+  return pagina(
+    e,
+    bannerVencedor(e),
+    quadro("titulo-primeira", "Como 1ª escolha", grafico(e, "primeira_escolha", VOTOS)),
+    quadro("titulo-pontos", "Pontos", grafico(e, "pontos", PONTOS)),
+    quadro(
+      "titulo-participacao",
+      "Participação",
       h(
         "div",
         { class: "duas-colunas" },
@@ -56,8 +105,12 @@ export function paginaEleicao(dados, id) {
         estatistica(e.pontos_atribuidos, e.pontos_possiveis, "pontos atribuídos"),
       ),
     ),
-    (e.notas || []).length > 0 && h("ul", { class: "notas" }, e.notas.map((nota) => h("li", {}, nota))),
-    h("nav", { class: "vizinhas", "aria-label": "Outras eleições do mesmo tipo" }, vizinha(e.anterior, "anterior"), vizinha(e.seguinte, "seguinte")),
   );
-  return { titulo: e.titulo, no };
+}
+
+export function paginaEleicao(dados, id) {
+  const e = dados.porId.get(id);
+  if (!e) return null;
+  if (e.formato === "opcoes") return paginaReferendo(e);
+  return e.sistema === "votos" ? paginaVotos(e) : paginaPontos(e);
 }

@@ -10,6 +10,10 @@ export function percentagem(parte, total) {
   return `${PERCENTAGEM.format((parte / total) * 100)}%`;
 }
 
+export function dataCurta(iso) {
+  return iso.split("-").reverse().join("/");
+}
+
 export function plural(valor, [singular, varios]) {
   return valor === 1 ? singular : varios;
 }

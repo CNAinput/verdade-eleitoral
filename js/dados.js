@@ -1,3 +1,4 @@
+import { dataCurta } from "./formato.js";
 import { validar } from "./validar.js";
 
 const ENDERECO = "dados/eleicoes.json";
@@ -7,6 +8,7 @@ let promessa = null;
 function preparar(bruto) {
   const tipos = bruto.tipos || {};
   const partidos = bruto.partidos || {};
+  const respostas = bruto.respostas || {};
   const fotos = bruto.fotos || {};
   const eleicoes = (bruto.eleicoes || []).map((e, posicao) => {
     const candidatos = (e.candidatos || []).map((c) => ({
@@ -14,17 +16,23 @@ function preparar(bruto) {
       cor: (partidos[c.partido] || {}).cor || null,
       foto: fotos[c.nome] || null,
     }));
+    const opcoes = (e.opcoes || []).map((o) => ({
+      ...o,
+      cor: (respostas[o.nome] || {}).cor || null,
+    }));
     const tipoInfo = tipos[e.tipo] || {};
     return {
       ...e,
       candidatos,
+      opcoes,
       posicao,
       tipoInfo,
-      titulo: `${tipoInfo.nome || e.tipo} ${e.ano}`,
+      formato: tipoInfo.formato || "candidatos",
+      titulo: `${tipoInfo.nome || e.tipo} ${e.data ? dataCurta(e.data) : e.ano}`,
       eleitos: candidatos.filter((c) => c.eleito),
     };
   });
-  eleicoes.sort((a, b) => b.ano - a.ano || a.posicao - b.posicao);
+  eleicoes.sort((a, b) => b.ano - a.ano || (a.data && b.data ? b.data.localeCompare(a.data) : 0) || a.posicao - b.posicao);
 
   const porId = new Map(eleicoes.map((e) => [e.id, e]));
   const porTipo = new Map();
