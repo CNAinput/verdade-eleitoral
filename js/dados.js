@@ -28,11 +28,11 @@ function preparar(bruto) {
       posicao,
       tipoInfo,
       formato: tipoInfo.formato || "candidatos",
-      titulo: `${tipoInfo.nome || e.tipo} ${e.data ? dataCurta(e.data) : e.ano}`,
+      titulo: e.titulo || `${tipoInfo.nome || e.tipo} ${e.data ? dataCurta(e.data) : e.ano}`,
       eleitos: candidatos.filter((c) => c.eleito),
     };
   });
-  eleicoes.sort((a, b) => b.ano - a.ano || (a.data && b.data ? b.data.localeCompare(a.data) : 0) || a.posicao - b.posicao);
+  eleicoes.sort((a, b) => b.ano - a.ano || a.posicao - b.posicao);
 
   const porId = new Map(eleicoes.map((e) => [e.id, e]));
   const porTipo = new Map();

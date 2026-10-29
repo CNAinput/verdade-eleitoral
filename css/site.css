@@ -13,7 +13,7 @@
   --accent-suave: #e3f4e0;
   --barra-destaque: #008a00;
   --pista: #e1e8de;
-  --outros: #6f7c70;
+  --outros: #737373;
   --foco: #006100;
   --serif: Georgia, "Times New Roman", "DejaVu Serif", serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -35,7 +35,7 @@
   --accent-suave: #12301a;
   --barra-destaque: #2fcf2f;
   --pista: #223022;
-  --outros: #7f8c7f;
+  --outros: #8a8a8a;
   --foco: #5fe65f;
   --sombra: none;
   color-scheme: dark;
@@ -204,20 +204,104 @@ a:hover {
   display: inline;
 }
 
-.botao-tema {
+/* Interruptor claro e escuro */
+.interruptor {
+  position: relative;
   flex: none;
-  padding: 0.45rem 0.9rem;
-  background: var(--superficie);
-  color: var(--texto);
-  border: 1px solid var(--borda);
+  width: 3.9rem;
+  height: 2.1rem;
+  padding: 0;
+  overflow: hidden;
+  background-color: #7fc4f5;
+  border: 1px solid #3b82b8;
   border-radius: 999px;
-  font: inherit;
-  font-size: 0.9rem;
+  box-shadow: inset 0 1px 3px rgba(0, 40, 80, 0.25);
   cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
-.botao-tema:hover {
-  border-color: var(--accent);
+:root[data-tema="escuro"] .interruptor {
+  background-color: #16213f;
+  border-color: #7d8cc0;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.interruptor:hover {
+  filter: brightness(1.07);
+}
+
+.interruptor-estrelas {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.55rem;
+  width: 2px;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0.6rem 0.45rem 0 0 #ffffff, 0.3rem 0.95rem 0 -0.5px #ffffff, 1rem 0.1rem 0 0 #ffffff, 1.35rem 0.75rem 0 -0.5px #ffffff;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+:root[data-tema="escuro"] .interruptor-estrelas {
+  opacity: 1;
+}
+
+.interruptor-bola {
+  position: absolute;
+  top: 50%;
+  left: 0.2rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transform: translate(var(--x, 0), -50%);
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.interruptor[aria-checked="true"] .interruptor-bola {
+  --x: calc(1.9rem - 2px);
+  background: #e9edf8;
+}
+
+.interruptor-bola svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: -0.525rem 0 0 -0.525rem;
+  transition: opacity 0.25s, transform 0.4s;
+}
+
+.icone-sol {
+  color: #d97a00;
+}
+
+.icone-lua {
+  color: #33407a;
+  opacity: 0;
+  transform: rotate(-60deg) scale(0.5);
+}
+
+.interruptor[aria-checked="true"] .icone-sol {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+.interruptor[aria-checked="true"] .icone-lua {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interruptor,
+  .interruptor-estrelas,
+  .interruptor-bola,
+  .interruptor-bola svg {
+    transition: none;
+  }
 }
 
 .rodape {
@@ -308,7 +392,7 @@ a:hover {
   overflow: hidden;
   background: var(--cor);
   box-shadow: 0 0 0 3px var(--cor-vista);
-  color: #ffffff;
+  color: var(--sobre-cor, #ffffff);
   font-family: var(--serif);
   font-size: 1.5rem;
   font-weight: 700;

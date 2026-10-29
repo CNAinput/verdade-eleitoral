@@ -43,10 +43,21 @@ function textoValor(c, campo, unidade, base) {
   return `${inteiro(c[campo])} ${plural(c[campo], unidade)} (${percentagem(c[campo], base)})`;
 }
 
+// Texto claro ou escuro, conforme o contraste.
+function corSobre(hex) {
+  const [r, g, b] = [1, 3, 5]
+    .map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+    .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+  const luminancia = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return 1.05 / (luminancia + 0.05) >= 4.5 ? "#ffffff" : "#111611";
+}
+
 // Aplica a cor do partido ao elemento.
 function colorir(elemento, cor) {
   elemento.classList.add("partido");
-  if (cor) elemento.style.setProperty("--cor", cor);
+  if (!cor) return;
+  elemento.style.setProperty("--cor", cor);
+  elemento.style.setProperty("--sobre-cor", corSobre(cor));
 }
 
 // Distingue segmentos vizinhos com a mesma cor.
