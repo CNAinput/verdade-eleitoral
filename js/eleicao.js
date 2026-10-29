@@ -1,5 +1,5 @@
 import { h } from "./dom.js";
-import { barras, fraseVencedor, pista, PONTOS, selo, VOTOS } from "./componentes.js";
+import { fraseVencedor, grafico, pista, PONTOS, selo, VOTOS } from "./componentes.js";
 import { inteiro, percentagem } from "./formato.js";
 
 function estatistica(parte, total, legenda) {
@@ -8,7 +8,7 @@ function estatistica(parte, total, legenda) {
     { class: "estatistica" },
     h("p", { class: "estatistica-valor" }, `${inteiro(parte)} de ${inteiro(total)}`),
     h("p", { class: "estatistica-legenda" }, legenda, " ", h("span", { class: "muted" }, `(${percentagem(parte, total)})`)),
-    pista(total > 0 ? (parte / total) * 100 : 0, true),
+    pista(total > 0 ? (parte / total) * 100 : 0),
   );
 }
 
@@ -35,6 +35,18 @@ export function paginaEleicao(dados, id) {
     h("p", { class: "vencedor" }, e.eleitos.length > 0 && selo("Eleito"), h("span", {}, fraseVencedor(e))),
     h(
       "section",
+      { class: "quadro", "aria-labelledby": "titulo-primeira" },
+      h("h2", { id: "titulo-primeira" }, "Como 1ª escolha"),
+      grafico(e, "primeira_escolha", VOTOS),
+    ),
+    h(
+      "section",
+      { class: "quadro", "aria-labelledby": "titulo-pontos" },
+      h("h2", { id: "titulo-pontos" }, "Pontos"),
+      grafico(e, "pontos", PONTOS),
+    ),
+    h(
+      "section",
       { class: "quadro", "aria-labelledby": "titulo-participacao" },
       h("h2", { id: "titulo-participacao" }, "Participação"),
       h(
@@ -43,18 +55,6 @@ export function paginaEleicao(dados, id) {
         estatistica(e.votantes, e.inscritos, "votantes compareceram"),
         estatistica(e.pontos_atribuidos, e.pontos_possiveis, "pontos atribuídos"),
       ),
-    ),
-    h(
-      "section",
-      { class: "quadro", "aria-labelledby": "titulo-primeira" },
-      h("h2", { id: "titulo-primeira" }, "Como 1ª escolha"),
-      barras(e, "primeira_escolha", VOTOS),
-    ),
-    h(
-      "section",
-      { class: "quadro", "aria-labelledby": "titulo-pontos" },
-      h("h2", { id: "titulo-pontos" }, "Pontos"),
-      barras(e, "pontos", PONTOS),
     ),
     (e.notas || []).length > 0 && h("ul", { class: "notas" }, e.notas.map((nota) => h("li", {}, nota))),
     h("nav", { class: "vizinhas", "aria-label": "Outras eleições do mesmo tipo" }, vizinha(e.anterior, "anterior"), vizinha(e.seguinte, "seguinte")),

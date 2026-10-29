@@ -246,7 +246,6 @@ a:hover {
 .aviso {
   padding: 0.75rem 1rem;
   border: 1px solid var(--borda);
-  border-left: 4px solid var(--accent);
   background: var(--superficie);
   border-radius: var(--raio);
 }
@@ -286,6 +285,43 @@ a:hover {
   }
 }
 
+/* Cor do partido e fotografia */
+.partido {
+  --cor: var(--outros);
+  --cor-vista: var(--cor);
+}
+
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  :root[data-tema="escuro"] .partido {
+    --cor-vista: color-mix(in srgb, var(--cor) 75%, #ffffff);
+  }
+}
+
+.foto {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--cor);
+  box-shadow: 0 0 0 3px var(--cor-vista);
+  color: #ffffff;
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* Barras de resultados */
 .barras {
   list-style: none;
@@ -293,6 +329,17 @@ a:hover {
   padding: 0;
   display: grid;
   gap: 1rem;
+}
+
+.barra {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.barra-corpo {
+  flex: 1;
+  min-width: 0;
 }
 
 .barra-texto {
@@ -325,38 +372,111 @@ a:hover {
   border-radius: 999px;
 }
 
+.enchimento.partido {
+  background: var(--cor-vista);
+}
+
 .enchimento.destacado {
   background: var(--barra-destaque);
 }
 
-.divisao {
+.divisao,
+.duelo-barra {
   display: flex;
   gap: 2px;
-  height: 0.6rem;
-  margin-top: 0.6rem;
   border-radius: 999px;
   overflow: hidden;
 }
 
-.segmento {
-  display: block;
-  height: 100%;
-  background: var(--outros);
+.divisao {
+  height: 0.6rem;
 }
 
-.segmento:nth-child(n + 3) {
+.divisao-caixa {
+  margin-top: 0.6rem;
+}
+
+.pista-caixa,
+.divisao-caixa,
+.duelo-meio {
+  position: relative;
+}
+
+/* Linha a meio: a maioria */
+.maioria {
+  position: absolute;
+  left: 50%;
+  top: -0.3rem;
+  bottom: -0.3rem;
+  width: 2px;
+  transform: translateX(-50%);
+  background: var(--texto);
+  box-shadow: 0 0 0 1px var(--superficie);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.maioria-rotulo {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 0.15rem;
+  font-size: 0.7rem;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--texto-2);
+}
+
+.duelo-barra {
+  height: 1.4rem;
+}
+
+.segmento {
+  display: block;
+  flex: 0 1 0%;
+  height: 100%;
+  background: var(--cor-vista);
+}
+
+.segmento.repetida {
   opacity: 0.6;
 }
 
-.segmento.destacado {
-  background: var(--barra-destaque);
+/* Duelo entre dois candidatos */
+.duelo {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.6rem 0.9rem;
+  padding-top: 0.6rem;
+}
+
+.duelo-lados {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.duelo-lado {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.duelo-lado:last-child {
+  align-items: flex-end;
+  text-align: right;
 }
 
 /* Última eleição */
 .destaque {
   background: var(--superficie);
   border: 1px solid var(--borda);
-  border-left: 6px solid var(--accent);
   border-radius: var(--raio);
   box-shadow: var(--sombra);
   padding: 1.25rem 1.25rem 1rem;
@@ -533,5 +653,11 @@ a:hover {
 
   .marca img {
     height: 2.75rem;
+  }
+
+  .foto {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.2rem;
   }
 }

@@ -6,6 +6,16 @@
       "artigo": "o"
     }
   },
+  "partidos": {
+    "PC": { "cor": "#d32f2f" },
+    "PL": { "cor": "#1d3f9e" },
+    "PE": { "cor": "#2b8a3e" }
+  },
+  "fotos": {
+    "KingBJ": "img/candidatos/kingbj.png",
+    "batata.j22": "img/candidatos/batata-j22.png",
+    "Chip_12": "img/candidatos/chip-12.png"
+  },
   "eleicoes": [
     {
       "id": "presidenciais-2026",

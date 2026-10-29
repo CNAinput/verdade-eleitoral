@@ -1,5 +1,5 @@
 import { h } from "./dom.js";
-import { barras, divisao, fraseVencedor, nomeCandidato, PONTOS, VOTOS } from "./componentes.js";
+import { divisao, fraseVencedor, grafico, nomeCandidato, PONTOS, VOTOS } from "./componentes.js";
 import { inteiro, percentagem, plural } from "./formato.js";
 
 function ligacao(e) {
@@ -16,8 +16,8 @@ function destaque(e) {
     h(
       "div",
       { class: "duas-colunas" },
-      h("div", {}, h("h3", {}, "Como 1ª escolha"), barras(e, "primeira_escolha", VOTOS)),
-      h("div", {}, h("h3", {}, "Pontos"), barras(e, "pontos", PONTOS)),
+      h("div", {}, h("h3", {}, "Como 1ª escolha"), grafico(e, "primeira_escolha", VOTOS)),
+      h("div", {}, h("h3", {}, "Pontos"), grafico(e, "pontos", PONTOS)),
     ),
     h("p", { class: "mais" }, h("a", { href: ligacao(e) }, "Ver o resultado completo")),
   );

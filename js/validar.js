@@ -8,7 +8,7 @@ function soma(lista, campo) {
   return lista.reduce((total, item) => total + item[campo], 0);
 }
 
-function validarEleicao(e, tipos, problemas) {
+function validarEleicao(e, tipos, partidos, problemas) {
   const ref = e.id || "(sem id)";
   const erro = (texto) => problemas.push(`${ref}: ${texto}`);
 
@@ -24,6 +24,7 @@ function validarEleicao(e, tipos, problemas) {
   if (candidatos.length === 0) return erro("sem candidatos");
   for (const c of candidatos) {
     if (!c.nome) erro("candidato sem nome");
+    if (c.partido && !partidos[c.partido]) erro(`partido ${c.partido} sem cor em "partidos"`);
     for (const campo of ["primeira_escolha", "pontos"]) {
       if (!inteiroNaoNegativo(c[campo])) erro(`${c.nome}: ${campo} inválido`);
     }
@@ -45,11 +46,18 @@ function validarEleicao(e, tipos, problemas) {
 export function validar(bruto) {
   const problemas = [];
   const tipos = bruto.tipos || {};
+  const partidos = bruto.partidos || {};
+  for (const [sigla, partido] of Object.entries(partidos)) {
+    if (!/^#[0-9a-f]{6}$/i.test(partido.cor || "")) problemas.push(`${sigla}: cor inválida`);
+  }
+  for (const [nome, foto] of Object.entries(bruto.fotos || {})) {
+    if (typeof foto !== "string" || !foto) problemas.push(`${nome}: foto inválida`);
+  }
   const ids = new Set();
   for (const e of bruto.eleicoes || []) {
     if (ids.has(e.id)) problemas.push(`${e.id}: id repetido`);
     ids.add(e.id);
-    validarEleicao(e, tipos, problemas);
+    validarEleicao(e, tipos, partidos, problemas);
   }
   return problemas;
 }

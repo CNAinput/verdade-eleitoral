@@ -6,8 +6,14 @@ let promessa = null;
 
 function preparar(bruto) {
   const tipos = bruto.tipos || {};
+  const partidos = bruto.partidos || {};
+  const fotos = bruto.fotos || {};
   const eleicoes = (bruto.eleicoes || []).map((e, posicao) => {
-    const candidatos = e.candidatos || [];
+    const candidatos = (e.candidatos || []).map((c) => ({
+      ...c,
+      cor: (partidos[c.partido] || {}).cor || null,
+      foto: fotos[c.nome] || null,
+    }));
     const tipoInfo = tipos[e.tipo] || {};
     return {
       ...e,
