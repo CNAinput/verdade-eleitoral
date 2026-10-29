@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b100b" media="(prefers-color-scheme: dark)">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="description" content="Registo de todos os resultados eleitorais verdadeiros e oficiais da CNA.">
+<title>Verdade Eleitoral</title>
+<link rel="icon" href="img/favicon.ico" sizes="any">
+<link rel="icon" href="img/favicon.png" type="image/png">
+<link rel="stylesheet" href="css/site.css">
+<script type="module" src="js/main.js"></script>
+</head>
+<body>
+<a class="salto" href="#conteudo">Saltar para o conteúdo</a>
+<header class="topo">
+  <div class="miolo">
+    <a class="marca" href="#/" aria-label="Verdade Eleitoral, página inicial">
+      <picture>
+        <source srcset="img/logo-escuro.png" media="(prefers-color-scheme: dark)">
+        <img src="img/logo.png" alt="Verdade Eleitoral" width="504" height="167">
+      </picture>
+    </a>
+  </div>
+</header>
+<main id="conteudo" class="miolo" tabindex="-1">
+  <noscript>
+    <p class="aviso">Este site precisa de JavaScript para mostrar os resultados.</p>
+  </noscript>
+</main>
+<footer class="rodape">
+  <div class="miolo">
+    <p>Registo de todos os resultados eleitorais verdadeiros e oficiais da CNA.</p>
+    <p>Um projeto do INPUT, Instituto de Plataformas e Utilidades Tecnológicas da CNA.</p>
+  </div>
+</footer>
+<div id="anuncios" class="so-leitores" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

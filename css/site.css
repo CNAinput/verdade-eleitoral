@@ -1,0 +1,505 @@
+@charset "UTF-8";
+
+:root {
+  --fundo: #f4f7f2;
+  --superficie: #ffffff;
+  --texto: #111611;
+  --texto-2: #465146;
+  --borda: #d3dcd0;
+  --accent: #00a200;
+  --accent-forte: #007a00;
+  --accent-texto: #006100;
+  --sobre-accent: #ffffff;
+  --accent-suave: #e3f4e0;
+  --barra-destaque: #008a00;
+  --pista: #e1e8de;
+  --outros: #6f7c70;
+  --foco: #006100;
+  --serif: Georgia, "Times New Roman", "DejaVu Serif", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --raio: 0.5rem;
+  --sombra: 0 1px 2px rgba(10, 25, 10, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #0b100b;
+    --superficie: #131a13;
+    --texto: #eef4ee;
+    --texto-2: #a7b4a7;
+    --borda: #2a352a;
+    --accent: #2fcf2f;
+    --accent-forte: #3ddc3d;
+    --accent-texto: #5fe65f;
+    --sobre-accent: #04180a;
+    --accent-suave: #12301a;
+    --barra-destaque: #2fcf2f;
+    --pista: #223022;
+    --outros: #7f8c7f;
+    --foco: #5fe65f;
+    --sombra: none;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.miolo {
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+main {
+  flex: 1 0 auto;
+  padding-top: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+main:focus {
+  outline: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--serif);
+  line-height: 1.2;
+  margin: 0 0 0.6rem;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.45rem;
+  margin-top: 2rem;
+}
+
+h3 {
+  font-size: 1.1rem;
+}
+
+h1:focus {
+  outline: none;
+}
+
+p {
+  margin: 0 0 0.75rem;
+}
+
+a {
+  color: var(--accent-texto);
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.muted {
+  color: var(--texto-2);
+}
+
+.lead {
+  font-size: 1.1rem;
+  color: var(--texto-2);
+  max-width: 40rem;
+}
+
+.so-leitores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.salto {
+  position: absolute;
+  left: 0.5rem;
+  top: -4rem;
+  z-index: 10;
+  padding: 0.6rem 1rem;
+  background: var(--accent-forte);
+  color: var(--sobre-accent);
+  border-radius: var(--raio);
+}
+
+.salto:focus {
+  top: 0.5rem;
+}
+
+/* Cabeçalho e rodapé */
+.topo {
+  background: var(--superficie);
+  border-bottom: 3px solid var(--accent);
+}
+
+.topo .miolo {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.marca {
+  display: inline-block;
+  line-height: 0;
+}
+
+.marca img {
+  height: 3.25rem;
+  width: auto;
+}
+
+.rodape {
+  background: var(--superficie);
+  border-top: 1px solid var(--borda);
+  color: var(--texto-2);
+  font-size: 0.9rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.rodape p {
+  margin-bottom: 0.25rem;
+}
+
+/* Elementos comuns */
+.sobretitulo {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-texto);
+}
+
+.aviso {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--borda);
+  border-left: 4px solid var(--accent);
+  background: var(--superficie);
+  border-radius: var(--raio);
+}
+
+.apresentacao {
+  margin-bottom: 1.5rem;
+}
+
+.migalhas {
+  margin-bottom: 1rem;
+}
+
+.selo {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--accent-forte);
+  color: var(--sobre-accent);
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.duas-colunas {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 40rem) {
+  .duas-colunas {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Barras de resultados */
+.barras {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.barra-texto {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.15rem 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.barra-nome {
+  font-weight: 600;
+}
+
+.barra-valor {
+  font-variant-numeric: tabular-nums;
+}
+
+.pista {
+  height: 0.85rem;
+  background: var(--pista);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.enchimento {
+  display: block;
+  height: 100%;
+  background: var(--outros);
+  border-radius: 999px;
+}
+
+.enchimento.destacado {
+  background: var(--barra-destaque);
+}
+
+.divisao {
+  display: flex;
+  gap: 2px;
+  height: 0.6rem;
+  margin-top: 0.6rem;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.segmento {
+  display: block;
+  height: 100%;
+  background: var(--outros);
+}
+
+.segmento:nth-child(n + 3) {
+  opacity: 0.6;
+}
+
+.segmento.destacado {
+  background: var(--barra-destaque);
+}
+
+/* Última eleição */
+.destaque {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-left: 6px solid var(--accent);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  padding: 1.25rem 1.25rem 1rem;
+}
+
+.destaque h2 {
+  margin-top: 0;
+  font-size: 1.7rem;
+}
+
+.destaque h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.destaque h2 a:hover {
+  text-decoration: underline;
+}
+
+.frase-vencedor {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.mais {
+  margin: 1.25rem 0 0;
+  font-weight: 600;
+}
+
+/* Lista de eleições anteriores */
+.cartoes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.cartao {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem 1.25rem;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.cartao:hover {
+  border-color: var(--accent);
+}
+
+.cartao-ano {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--accent-texto);
+  min-width: 4.5rem;
+}
+
+.cartao-corpo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cartao-titulo {
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+}
+
+/* Página da eleição */
+.vencedor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  margin: 0.75rem 0 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--accent-suave);
+  border: 1px solid var(--accent);
+  border-radius: var(--raio);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.vencedor .selo {
+  margin-left: 0;
+}
+
+.quadro {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  padding: 1rem 1.25rem 1.25rem;
+  margin-top: 1rem;
+}
+
+.quadro h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+.estatistica-valor {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 0.1rem;
+}
+
+.estatistica-legenda {
+  margin-bottom: 0.5rem;
+}
+
+.notas {
+  margin: 1rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--texto-2);
+}
+
+.vizinhas {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.vizinha {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1rem;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.vizinha:hover {
+  border-color: var(--accent);
+}
+
+.vizinha.seguinte {
+  text-align: right;
+  margin-left: auto;
+}
+
+.vizinha-sentido {
+  font-size: 0.8rem;
+  color: var(--texto-2);
+}
+
+.vizinha-titulo {
+  font-weight: 700;
+}
+
+@media (max-width: 30rem) {
+  h1 {
+    font-size: 1.65rem;
+  }
+
+  .cartao {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .marca img {
+    height: 2.75rem;
+  }
+}

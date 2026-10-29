@@ -1,0 +1,41 @@
+{
+  "tipos": {
+    "presidenciais": {
+      "nome": "Eleições Presidenciais",
+      "cargo": "Presidente da CNA",
+      "artigo": "o"
+    }
+  },
+  "eleicoes": [
+    {
+      "id": "presidenciais-2026",
+      "tipo": "presidenciais",
+      "ano": 2026,
+      "mandato_ate": 2027,
+      "votantes": 10,
+      "inscritos": 12,
+      "pontos_atribuidos": 50,
+      "pontos_possiveis": 60,
+      "candidatos": [
+        { "nome": "KingBJ", "partido": "PC", "primeira_escolha": 7, "pontos": 27, "eleito": true },
+        { "nome": "batata.j22", "partido": "PL", "primeira_escolha": 3, "pontos": 23 }
+      ],
+      "notas": ["A 2ª escolha é o contrário."]
+    },
+    {
+      "id": "presidenciais-2025",
+      "tipo": "presidenciais",
+      "ano": 2025,
+      "mandato_ate": 2026,
+      "votantes": 9,
+      "inscritos": 12,
+      "pontos_atribuidos": 45,
+      "pontos_possiveis": 60,
+      "candidatos": [
+        { "nome": "KingBJ", "partido": "PC", "primeira_escolha": 5, "pontos": 25, "eleito": true },
+        { "nome": "Chip_12", "partido": "PL", "primeira_escolha": 4, "pontos": 20 }
+      ],
+      "notas": ["A 2ª escolha é o contrário."]
+    }
+  ]
+}
