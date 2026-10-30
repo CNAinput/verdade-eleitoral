@@ -43,7 +43,7 @@ function validarPontos(e, partidos, erro) {
   validarEleitos(candidatos, "pontos", erro);
 }
 
-function validarVotos(e, partidos, erro) {
+function validarVotos(e, partidos, erro, exigirEleito) {
   const candidatos = Array.isArray(e.candidatos) ? e.candidatos : [];
   const outros = Array.isArray(e.outros) ? e.outros : [];
   if (candidatos.length === 0) return erro("sem candidatos");
@@ -58,7 +58,16 @@ function validarVotos(e, partidos, erro) {
       erro("os votos e as outras categorias não somam os inscritos");
     }
   }
-  validarEleitos(candidatos, "votos", erro);
+  if (exigirEleito) validarEleitos(candidatos, "votos", erro);
+}
+
+function validarRondas(e, partidos, erro) {
+  const rondas = Array.isArray(e.rondas) ? e.rondas : [];
+  if (rondas.length < 2) return erro("rondas pede pelo menos 2 voltas");
+  rondas.forEach((ronda, i) => {
+    if (!ronda.nome) erro(`volta ${i + 1} sem nome`);
+    validarVotos(ronda, partidos, (texto) => erro(`${ronda.nome || `volta ${i + 1}`}: ${texto}`), i === rondas.length - 1);
+  });
 }
 
 function validarOpcoes(e, respostas, erro) {
@@ -89,8 +98,13 @@ function validarEleicao(e, tipos, partidos, respostas, problemas) {
   }
   if (e.sistema !== undefined && e.sistema !== "pontos" && e.sistema !== "votos") erro(`sistema "${e.sistema}" desconhecido`);
   if (tipo && tipo.formato === "opcoes") validarOpcoes(e, respostas, erro);
-  else if (e.sistema === "votos") validarVotos(e, partidos, erro);
-  else validarPontos(e, partidos, erro);
+  else if (e.sistema === "votos") {
+    if (e.rondas !== undefined) validarRondas(e, partidos, erro);
+    else validarVotos(e, partidos, erro, true);
+  } else {
+    if (e.rondas !== undefined) erro("rondas só existe no sistema votos");
+    validarPontos(e, partidos, erro);
+  }
 }
 
 function validarCores(mapa, problemas) {

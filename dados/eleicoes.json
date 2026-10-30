@@ -25,14 +25,16 @@
     "PE": { "cor": "#2b8a3e" },
     "PR-PE": { "cor": "#d9640a" },
     "PR": { "cor": "#5a2d91" },
-    "BVA": { "cor": "#e6b400" }
+    "BVA": { "cor": "#e6b400" },
+    "Ind": { "cor": "#737373" }
   },
   "fotos": {
     "KingBJ": "img/candidatos/kingbj.png",
     "batata.j22": "img/candidatos/batata-j22.png",
     "Chip_12": "img/candidatos/chip-12.png",
     "Chip": "img/candidatos/chip-12.png",
-    "Ssslav7": "img/candidatos/ssslav7.png"
+    "Ssslav7": "img/candidatos/ssslav7.png",
+    "Pedro": "img/candidatos/pedro.png"
   },
   "eleicoes": [
     {
@@ -104,7 +106,7 @@
       "id": "portavoz-2023-04",
       "tipo": "portavoz",
       "ano": 2023,
-      "titulo": "Eleições de Porta-Voz de Abril 2023",
+      "titulo": "Eleições de Porta-Voz de Abril de 2023",
       "sistema": "votos",
       "candidatos": [
         { "nome": "Ssslav7", "partido": "PC", "votos": 41, "eleito": true },
@@ -116,27 +118,105 @@
       "id": "portavoz-2023-01",
       "tipo": "portavoz",
       "ano": 2023,
-      "titulo": "Eleições Antecipadas de Porta-Voz de Janeiro 2023",
+      "titulo": "Eleições Antecipadas de Porta-Voz de Janeiro de 2023",
       "sistema": "votos",
-      "candidatos": [
-        { "nome": "Ssslav7", "partido": "PC", "votos": 52, "eleito": true },
-        { "nome": "1nbar", "partido": "PR", "votos": 4 }
+      "rondas": [
+        {
+          "nome": "1ª volta",
+          "candidatos": [
+            { "nome": "Ssslav7", "partido": "PC", "votos": 20 },
+            { "nome": "1nbar", "partido": "PR", "votos": 20 },
+            { "nome": "Chip", "partido": "PE", "votos": 11 }
+          ],
+          "outros": [{ "nome": "Votos em falta", "votos": 13 }]
+        },
+        {
+          "nome": "2ª volta",
+          "candidatos": [
+            { "nome": "Ssslav7", "partido": "PC", "votos": 45, "eleito": true },
+            { "nome": "1nbar", "partido": "PR", "votos": 11 }
+          ]
+        }
       ]
     },
     {
       "id": "portavoz-2022-10",
       "tipo": "portavoz",
       "ano": 2022,
-      "titulo": "Eleições de Porta-Voz de Outubro 2022",
+      "titulo": "Eleições de Porta-Voz de Outubro de 2022",
       "sistema": "votos",
       "candidatos": [
         { "nome": "1nbar", "partido": "BVA", "votos": 20, "eleito": true },
         { "nome": "Ssslav7", "partido": "PC", "votos": 17 },
         { "nome": "Chip", "partido": "PE", "votos": 10 },
-        { "nome": "Saito", "votos": 7 },
-        { "nome": "LG.GG", "votos": 1 },
-        { "nome": "Patinho", "votos": 1 }
+        { "nome": "Saito", "partido": "Ind", "votos": 7 },
+        { "nome": "LG.GG", "partido": "Ind", "votos": 1 },
+        { "nome": "Patinho", "partido": "Ind", "votos": 1 }
       ]
+    },
+    {
+      "id": "portavoz-2022-04",
+      "tipo": "portavoz",
+      "ano": 2022,
+      "titulo": "Eleições de Porta-Voz de Abril de 2022",
+      "sistema": "votos",
+      "rondas": [
+        {
+          "nome": "1ª volta",
+          "candidatos": [
+            { "nome": "Ssslav7", "partido": "Ind", "votos": 4 },
+            { "nome": "Pedro", "partido": "PC", "votos": 10 },
+            { "nome": "Chip", "partido": "PE", "votos": 10 }
+          ],
+          "outros": [{ "nome": "Não compareceu", "votos": 3, "unidade": "votante" }]
+        },
+        {
+          "nome": "2ª volta",
+          "candidatos": [
+            { "nome": "Pedro", "partido": "PC", "votos": 16, "eleito": true },
+            { "nome": "Chip", "partido": "PE", "votos": 11 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "portavoz-2021-10",
+      "tipo": "portavoz",
+      "ano": 2021,
+      "titulo": "Eleições de Porta-Voz de Outubro de 2021",
+      "sistema": "votos",
+      "candidatos": [
+        { "nome": "Chip", "partido": "PE", "votos": 17, "eleito": true },
+        { "nome": "Pedro", "partido": "PC", "votos": 12 },
+        { "nome": "batata.j22", "partido": "PR", "votos": 5 }
+      ],
+      "outros": [{ "nome": "Não compareceu", "votos": 4, "unidade": "votante" }]
+    },
+    {
+      "id": "portavoz-2021-03",
+      "tipo": "portavoz",
+      "ano": 2021,
+      "titulo": "Eleições de Porta-Voz de Março de 2021",
+      "sistema": "votos",
+      "candidatos": [
+        { "nome": "Chip", "partido": "PE", "votos": 4 },
+        { "nome": "Pedro", "partido": "PC", "votos": 5 },
+        { "nome": "batata.j22", "partido": "PR", "votos": 7, "eleito": true }
+      ],
+      "outros": [{ "nome": "Não compareceu", "votos": 5, "unidade": "votante" }]
+    },
+    {
+      "id": "portavoz-2020-12",
+      "tipo": "portavoz",
+      "ano": 2020,
+      "titulo": "Eleições de Porta-Voz de Dezembro de 2020",
+      "sistema": "votos",
+      "candidatos": [
+        { "nome": "Ssslav7", "partido": "Ind", "votos": 11, "eleito": true },
+        { "nome": "Pedro", "partido": "PC", "votos": 6 },
+        { "nome": "Chip", "partido": "PE", "votos": 4 }
+      ],
+      "outros": [{ "nome": "Não compareceu", "votos": 3, "unidade": "votante" }]
     }
   ]
 }

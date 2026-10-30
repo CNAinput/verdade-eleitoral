@@ -209,6 +209,21 @@ export function divisao(e) {
   return h("div", { class: "divisao-caixa" }, h("div", { class: "divisao", "aria-hidden": "true" }, segmentosDe(itens)), marcaMaioria(false));
 }
 
+// Visão de uma volta como eleição.
+export function vistaRonda(e, ronda) {
+  return { ...e, candidatos: ronda.candidatos, outros: ronda.outros, inscritos: ronda.inscritos };
+}
+
+// Uma barra compacta por volta.
+export function divisaoCartao(e) {
+  if (e.rondas.length < 2) return divisao(e);
+  return h(
+    "div",
+    { class: "divisoes" },
+    e.rondas.map((r) => h("div", { class: "divisao-linha" }, h("span", { class: "divisao-rotulo" }, r.nome), divisao(vistaRonda(e, r)))),
+  );
+}
+
 function opcoesNaBarra(e) {
   return e.opcoes.filter((o) => !o.branco);
 }

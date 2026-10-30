@@ -1,6 +1,6 @@
 import { h } from "./dom.js";
 import {
-  divisao,
+  divisaoCartao,
   fraseOpcao,
   fraseVencedor,
   graficoReferendo,
@@ -11,6 +11,7 @@ import {
   textoTotalCandidatos,
   textoTotalVotos,
   totalDeVotos,
+  vistaRonda,
   VOTOS,
 } from "./componentes.js";
 import { inteiro, percentagem, plural } from "./formato.js";
@@ -19,26 +20,29 @@ function ligacao(e) {
   return `#/eleicao/${e.id}`;
 }
 
+function quadro(titulo, ...filhos) {
+  return h("div", { class: "quadro" }, h("h3", {}, titulo), filhos);
+}
+
 function corpoDestaque(e) {
   if (e.formato === "opcoes") {
-    return [h("p", { class: "pergunta" }, e.pergunta), h("p", { class: "frase-vencedor" }, fraseOpcao(e)), graficoReferendo(e)];
+    return [
+      h("p", { class: "pergunta" }, e.pergunta),
+      h("p", { class: "frase-vencedor" }, fraseOpcao(e)),
+      quadro("Votos", graficoReferendo(e)),
+    ];
   }
   if (e.sistema === "votos") {
+    const vistas = e.rondas.length > 1 ? e.rondas.map((r) => [r.nome, vistaRonda(e, r)]) : [["Votos", e]];
     return [
       h("p", { class: "frase-vencedor" }, fraseVencedor(e)),
-      h("h3", {}, "Votos"),
-      grafico(e, "votos", VOTOS),
-      (e.outros || []).length > 0 && listaOutros(e),
+      vistas.map(([nome, vista]) => quadro(nome, grafico(vista, "votos", VOTOS), (vista.outros || []).length > 0 && listaOutros(vista))),
     ];
   }
   return [
     h("p", { class: "frase-vencedor" }, fraseVencedor(e)),
-    h(
-      "div",
-      { class: "duas-colunas" },
-      h("div", {}, h("h3", {}, "Como 1ª escolha"), grafico(e, "primeira_escolha", VOTOS)),
-      h("div", {}, h("h3", {}, "Pontos"), grafico(e, "pontos", PONTOS)),
-    ),
+    quadro("Como 1ª escolha", grafico(e, "primeira_escolha", VOTOS)),
+    quadro("Pontos", grafico(e, "pontos", PONTOS)),
   ];
 }
 
@@ -69,7 +73,11 @@ function linhasCartao(e) {
     const base = votos ? totalDeVotos(e) : e.pontos_atribuidos;
     linhas.push(
       h("span", { class: "cartao-linha" }, `Eleito: ${nomeCandidato(eleito)}`),
-      h("span", { class: "cartao-linha muted" }, `${inteiro(valor)} ${plural(valor, votos ? VOTOS : PONTOS)} (${percentagem(valor, base)})`),
+      h(
+        "span",
+        { class: "cartao-linha muted" },
+        `${inteiro(valor)} ${plural(valor, votos ? VOTOS : PONTOS)} (${percentagem(valor, base)})${e.rondas.length > 1 ? ` na ${e.rondas[e.rondas.length - 1].nome}` : ""}`,
+      ),
     );
   }
   linhas.push(
@@ -86,7 +94,7 @@ function cartao(e) {
       "a",
       { class: "cartao", href: ligacao(e) },
       h("span", { class: "cartao-ano" }, e.ano),
-      h("span", { class: "cartao-corpo" }, h("span", { class: "cartao-titulo" }, e.titulo), linhasCartao(e), divisao(e)),
+      h("span", { class: "cartao-corpo" }, h("span", { class: "cartao-titulo" }, e.titulo), linhasCartao(e), divisaoCartao(e)),
     ),
   );
 }

@@ -9,6 +9,7 @@ import {
   pista,
   PONTOS,
   selo,
+  vistaRonda,
   VOTOS,
 } from "./componentes.js";
 import { inteiro, percentagem } from "./formato.js";
@@ -75,18 +76,22 @@ function paginaReferendo(e) {
   );
 }
 
-function paginaVotos(e) {
-  return pagina(
-    e,
-    bannerVencedor(e),
-    quadro(
-      "titulo-votos",
-      "Votos",
-      grafico(e, "votos", VOTOS),
-      (e.outros || []).length > 0 && listaOutros(e),
-      h("p", { class: "total-votos muted" }, linhaTotalVotos(e)),
-    ),
+function quadroVotos(id, titulo, vista) {
+  return quadro(
+    id,
+    titulo,
+    grafico(vista, "votos", VOTOS),
+    (vista.outros || []).length > 0 && listaOutros(vista),
+    h("p", { class: "total-votos muted" }, linhaTotalVotos(vista)),
   );
+}
+
+function paginaVotos(e) {
+  const quadros =
+    e.rondas.length > 1
+      ? e.rondas.map((r, i) => quadroVotos(`titulo-volta-${i + 1}`, r.nome, vistaRonda(e, r)))
+      : [quadroVotos("titulo-votos", "Votos", e)];
+  return pagina(e, bannerVencedor(e), quadros);
 }
 
 function paginaPontos(e) {

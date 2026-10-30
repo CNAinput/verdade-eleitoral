@@ -334,6 +334,18 @@ a:hover {
   border-radius: var(--raio);
 }
 
+/* Só aparece se o conteúdo não chegar */
+.arranque {
+  visibility: hidden;
+  animation: mostrar-arranque 0.01s 4s forwards;
+}
+
+@keyframes mostrar-arranque {
+  to {
+    visibility: visible;
+  }
+}
+
 .apresentacao {
   margin-bottom: 1.5rem;
 }
@@ -514,6 +526,30 @@ a:hover {
 
 .duelo-barra {
   height: 1.4rem;
+}
+
+.divisoes {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.divisao-linha {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.divisao-linha .divisao-caixa {
+  flex: 1;
+  margin-top: 0;
+}
+
+.divisao-rotulo {
+  flex: none;
+  width: 4.2rem;
+  font-size: 0.75rem;
+  color: var(--texto-2);
 }
 
 .segmento {
@@ -703,7 +739,8 @@ a:hover {
   margin-top: 1rem;
 }
 
-.quadro h2 {
+.quadro h2,
+.quadro h3 {
   margin-top: 0;
   font-size: 1.25rem;
 }

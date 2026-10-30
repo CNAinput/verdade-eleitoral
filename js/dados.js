@@ -11,11 +11,15 @@ function preparar(bruto) {
   const respostas = bruto.respostas || {};
   const fotos = bruto.fotos || {};
   const eleicoes = (bruto.eleicoes || []).map((e, posicao) => {
-    const candidatos = (e.candidatos || []).map((c) => ({
-      ...c,
-      cor: (partidos[c.partido] || {}).cor || null,
-      foto: fotos[c.nome] || null,
-    }));
+    const enriquecer = (lista) =>
+      (lista || []).map((c) => ({
+        ...c,
+        cor: (partidos[c.partido] || {}).cor || null,
+        foto: fotos[c.nome] || null,
+      }));
+    const rondas = (e.rondas || []).map((r) => ({ ...r, candidatos: enriquecer(r.candidatos), outros: r.outros || [] }));
+    const final = rondas[rondas.length - 1];
+    const candidatos = final ? final.candidatos : enriquecer(e.candidatos);
     const opcoes = (e.opcoes || []).map((o) => ({
       ...o,
       cor: (respostas[o.nome] || {}).cor || null,
@@ -24,6 +28,8 @@ function preparar(bruto) {
     return {
       ...e,
       candidatos,
+      outros: final ? final.outros : e.outros,
+      rondas,
       opcoes,
       posicao,
       tipoInfo,
