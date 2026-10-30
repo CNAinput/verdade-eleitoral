@@ -2,13 +2,25 @@ import { carregar } from "./dados.js";
 import { h, limpar } from "./dom.js";
 import { paginaEleicao } from "./eleicao.js";
 import { paginaInicio } from "./inicio.js";
+import { paginaMandatos } from "./linha.js";
 
 const NOME = "Verdade Eleitoral";
 
 const ROTAS = [
   { padrao: /^\/?$/, pagina: paginaInicio },
   { padrao: /^\/eleicao\/([a-z0-9_-]+)$/, pagina: paginaEleicao },
+  { padrao: /^\/mandatos$/, pagina: paginaMandatos },
 ];
+
+// Marca no menu a secção atual.
+function marcarMenu() {
+  const mandatos = location.hash.replace(/^#/, "") === "/mandatos";
+  for (const ligacao of document.querySelectorAll(".menu a")) {
+    const atual = (ligacao.dataset.rota === "mandatos") === mandatos;
+    if (atual) ligacao.setAttribute("aria-current", "page");
+    else ligacao.removeAttribute("aria-current");
+  }
+}
 
 let primeira = true;
 
@@ -43,6 +55,7 @@ async function mostrar() {
     console.error(erro);
     pagina = erroDeCarregamento();
   }
+  marcarMenu();
   const raiz = document.getElementById("conteudo");
   limpar(raiz).append(pagina.no);
   document.title = pagina.titulo ? `${pagina.titulo} · ${NOME}` : NOME;

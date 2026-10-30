@@ -34,7 +34,8 @@
     "Chip_12": "img/candidatos/chip-12.png",
     "Chip": "img/candidatos/chip-12.png",
     "Ssslav7": "img/candidatos/ssslav7.png",
-    "Pedro": "img/candidatos/pedro.png"
+    "Pedro": "img/candidatos/pedro.png",
+  "GamerA21": "img/candidatos/gamera21.png"
   },
   "eleicoes": [
     {
@@ -106,6 +107,7 @@
       "id": "portavoz-2023-04",
       "tipo": "portavoz",
       "ano": 2023,
+      "mes": 4,
       "titulo": "Eleições de Porta-Voz de Abril de 2023",
       "sistema": "votos",
       "candidatos": [
@@ -118,6 +120,7 @@
       "id": "portavoz-2023-01",
       "tipo": "portavoz",
       "ano": 2023,
+      "mes": 1,
       "titulo": "Eleições Antecipadas de Porta-Voz de Janeiro de 2023",
       "sistema": "votos",
       "rondas": [
@@ -143,6 +146,7 @@
       "id": "portavoz-2022-10",
       "tipo": "portavoz",
       "ano": 2022,
+      "mes": 10,
       "titulo": "Eleições de Porta-Voz de Outubro de 2022",
       "sistema": "votos",
       "candidatos": [
@@ -158,6 +162,7 @@
       "id": "portavoz-2022-04",
       "tipo": "portavoz",
       "ano": 2022,
+      "mes": 4,
       "titulo": "Eleições de Porta-Voz de Abril de 2022",
       "sistema": "votos",
       "rondas": [
@@ -183,6 +188,7 @@
       "id": "portavoz-2021-10",
       "tipo": "portavoz",
       "ano": 2021,
+      "mes": 10,
       "titulo": "Eleições de Porta-Voz de Outubro de 2021",
       "sistema": "votos",
       "candidatos": [
@@ -196,6 +202,7 @@
       "id": "portavoz-2021-03",
       "tipo": "portavoz",
       "ano": 2021,
+      "mes": 3,
       "titulo": "Eleições de Porta-Voz de Março de 2021",
       "sistema": "votos",
       "candidatos": [
@@ -209,6 +216,7 @@
       "id": "portavoz-2020-12",
       "tipo": "portavoz",
       "ano": 2020,
+      "mes": 12,
       "titulo": "Eleições de Porta-Voz de Dezembro de 2020",
       "sistema": "votos",
       "candidatos": [

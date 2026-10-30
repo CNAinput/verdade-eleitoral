@@ -96,6 +96,7 @@ function validarEleicao(e, tipos, partidos, respostas, problemas) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(e.data)) erro("data inválida");
     else if (Number(e.data.slice(0, 4)) !== e.ano) erro("a data não é do ano indicado");
   }
+  if (e.mes !== undefined && !(Number.isInteger(e.mes) && e.mes >= 1 && e.mes <= 12)) erro("mês inválido");
   if (e.sistema !== undefined && e.sistema !== "pontos" && e.sistema !== "votos") erro(`sistema "${e.sistema}" desconhecido`);
   if (tipo && tipo.formato === "opcoes") validarOpcoes(e, respostas, erro);
   else if (e.sistema === "votos") {
@@ -111,6 +112,76 @@ function validarCores(mapa, problemas) {
   for (const [chave, valor] of Object.entries(mapa)) {
     if (!/^#[0-9a-f]{6}$/i.test(valor.cor || "")) problemas.push(`${chave}: cor inválida`);
   }
+}
+
+function dataValida(texto) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(texto || "")) return false;
+  const [ano, mes, dia] = texto.split("-").map(Number);
+  const data = new Date(Date.UTC(ano, mes - 1, dia));
+  return data.getUTCFullYear() === ano && data.getUTCMonth() === mes - 1 && data.getUTCDate() === dia;
+}
+
+function validarBloco(b, partidos, erro) {
+  if (!dataValida(b.de)) erro(`${b.nome || "bloco"}: início inválido`);
+  if (b.ate !== null && b.ate !== undefined) {
+    if (!dataValida(b.ate)) erro(`${b.nome || "bloco"}: fim inválido`);
+    else if (dataValida(b.de) && b.ate <= b.de) erro(`${b.nome || "bloco"}: fim antes do início`);
+  }
+  if (b.vago) {
+    if (b.nome) erro("vago com nome");
+    return;
+  }
+  if (!b.nome) erro("mandato sem nome");
+  const siglas = Array.isArray(b.partido) ? b.partido : b.partido ? [b.partido] : [];
+  if (Array.isArray(b.partido) && siglas.length === 0) erro(`${b.nome}: lista de partidos vazia`);
+  for (const sigla of siglas) {
+    if (!partidos[sigla]) erro(`${b.nome}: partido ${sigla} sem cor em "partidos"`);
+  }
+}
+
+function validarFaixa(faixa, partidos, erro) {
+  faixa.forEach((b, i) => {
+    validarBloco(b, partidos, erro);
+    const anterior = faixa[i - 1];
+    if (!anterior) return;
+    if (!anterior.ate) erro(`${anterior.nome || "vago"}: só o último mandato fica em aberto`);
+    else if (b.de < anterior.ate) erro(`${b.nome || "vago"}: sobrepõe o mandato anterior`);
+  });
+}
+
+function validarCargo(c, bruto, erro) {
+  if (!c.nome) erro("cargo sem nome");
+  const partidos = bruto.partidos || {};
+  if (c.eleicoes !== undefined) {
+    if (c.faixas !== undefined) erro("cargo com faixas e eleicoes");
+    if (!(bruto.tipos || {})[c.eleicoes]) return erro(`tipo "${c.eleicoes}" não existe em "tipos"`);
+    const lista = (bruto.eleicoes || []).filter((e) => e.tipo === c.eleicoes);
+    if (lista.length === 0) erro("sem eleições deste tipo");
+    for (const e of lista) {
+      if (!Number.isInteger(e.mes)) erro(`${e.id}: falta o mês da eleição`);
+    }
+    return;
+  }
+  const faixas = Array.isArray(c.faixas) ? c.faixas : [];
+  if (faixas.length === 0) return erro("sem faixas");
+  faixas.forEach((faixa, i) => {
+    if (!Array.isArray(faixa) || faixa.length === 0) return erro(`faixa ${i + 1} vazia`);
+    validarFaixa(faixa, partidos, (texto) => erro(`faixa ${i + 1}: ${texto}`));
+  });
+}
+
+export function validarMandatos(mandatos, bruto) {
+  const problemas = [];
+  const cargos = Array.isArray(mandatos.cargos) ? mandatos.cargos : [];
+  if (cargos.length === 0) problemas.push("mandatos: sem cargos");
+  const ids = new Set();
+  for (const c of cargos) {
+    const ref = c.id || "(sem id)";
+    if (ids.has(c.id)) problemas.push(`${ref}: id repetido`);
+    ids.add(c.id);
+    validarCargo(c, bruto, (texto) => problemas.push(`${ref}: ${texto}`));
+  }
+  return problemas;
 }
 
 export function validar(bruto) {

@@ -53,7 +53,7 @@ function corSobre(hex) {
 }
 
 // Aplica a cor do partido ao elemento.
-function colorir(elemento, cor) {
+export function colorir(elemento, cor) {
   elemento.classList.add("partido");
   if (!cor) return;
   elemento.style.setProperty("--cor", cor);

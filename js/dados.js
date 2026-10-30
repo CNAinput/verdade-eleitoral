@@ -1,7 +1,9 @@
-import { dataCurta } from "./formato.js";
-import { validar } from "./validar.js";
+import { dataCurta, hojeIso } from "./formato.js";
+import { prepararMandatos } from "./mandatos.js";
+import { validar, validarMandatos } from "./validar.js";
 
 const ENDERECO = "dados/eleicoes.json";
+const ENDERECO_MANDATOS = "dados/mandatos.json";
 
 let promessa = null;
 
@@ -52,15 +54,27 @@ function preparar(bruto) {
       e.anterior = lista[i + 1] || null;
     });
   }
-  return { eleicoes, porId };
+  return { eleicoes, porId, partidos, fotos };
+}
+
+async function lerJson(endereco) {
+  const resposta = await fetch(endereco, { cache: "no-cache" });
+  if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+  return resposta.json();
+}
+
+// Falha só a linha de tempo.
+function prepararMandatosSeguro(brutoMandatos, bruto, dados) {
+  if (!brutoMandatos) return null;
+  for (const problema of validarMandatos(brutoMandatos, bruto)) console.warn(`Dados: ${problema}`);
+  return prepararMandatos(brutoMandatos, { ...dados, hoje: hojeIso() });
 }
 
 async function ler() {
-  const resposta = await fetch(ENDERECO, { cache: "no-cache" });
-  if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
-  const bruto = await resposta.json();
+  const [bruto, brutoMandatos] = await Promise.all([lerJson(ENDERECO), lerJson(ENDERECO_MANDATOS).catch(() => null)]);
   for (const problema of validar(bruto)) console.warn(`Dados: ${problema}`);
-  return preparar(bruto);
+  const dados = preparar(bruto);
+  return { ...dados, mandatos: prepararMandatosSeguro(brutoMandatos, bruto, dados) };
 }
 
 export function carregar() {

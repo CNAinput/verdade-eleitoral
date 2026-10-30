@@ -1,0 +1,53 @@
+{
+  "cargos": [
+    {
+      "id": "presidente",
+      "nome": "Presidente",
+      "faixas": [
+        [
+          { "nome": "edulis1", "partido": "Ind", "de": "2020-12-14", "ate": "2023-01-10" },
+          { "nome": "KingBJ", "partido": "PC", "de": "2023-01-10", "ate": null }
+        ]
+      ]
+    },
+    {
+      "id": "alto-conselho",
+      "nome": "Altos Conselheiros",
+      "faixas": [
+        [{ "nome": "KingBJ", "partido": "PC", "de": "2020-05-06", "ate": null }],
+        [{ "nome": "Pedro", "partido": "PC", "de": "2020-05-06", "ate": null }],
+        [
+          { "nome": "GamerA21", "partido": ["PE", "Ind"], "de": "2020-05-06", "ate": "2022-12-15" },
+          { "nome": "batata.j22", "partido": "PR", "de": "2022-12-15", "ate": "2023-06-05" },
+          { "vago": true, "de": "2023-06-05", "ate": "2023-06-21" },
+          { "nome": "GamerA21", "partido": "Ind", "de": "2023-06-21", "ate": "2025-07-05" },
+          { "nome": "Ssslav7", "partido": "PC", "de": "2025-07-05", "ate": null }
+        ]
+      ]
+    },
+    {
+      "id": "conselho-seguranca",
+      "nome": "Conselho de Segurança",
+      "subtitulo": "antigo Conselho das Mods",
+      "faixas": [
+        [
+          { "nome": "Chip_12", "partido": "PE", "de": "2020-05-06", "ate": "2021-10-23" },
+          { "nome": "batata.j22", "partido": "PR", "de": "2021-10-23", "ate": "2022-08-02" },
+          { "nome": "Chip_12", "partido": "PE", "de": "2022-08-02", "ate": "2023-04-26" },
+          { "vago": true, "de": "2023-04-26", "ate": "2025-07-05" },
+          { "nome": "Chip_12", "partido": "PL", "de": "2025-07-05", "ate": null }
+        ]
+      ]
+    },
+    {
+      "id": "porta-voz",
+      "nome": "Porta-Voz",
+      "eleicoes": "portavoz"
+    },
+    {
+      "id": "procurador",
+      "nome": "Procurador",
+      "faixas": [[{ "nome": "GamerA21", "partido": "Ind", "de": "2025-08-26", "ate": null }]]
+    }
+  ]
+}

@@ -13,6 +13,7 @@
   --accent-suave: #e3f4e0;
   --barra-destaque: #008a00;
   --pista: #e1e8de;
+  --faixa: rgba(70, 100, 60, 0.09);
   --outros: #737373;
   --foco: #006100;
   --serif: Georgia, "Times New Roman", "DejaVu Serif", serif;
@@ -35,6 +36,7 @@
   --accent-suave: #12301a;
   --barra-destaque: #2fcf2f;
   --pista: #223022;
+  --faixa: rgba(255, 255, 255, 0.06);
   --outros: #8a8a8a;
   --foco: #5fe65f;
   --sombra: none;
@@ -302,6 +304,35 @@ a:hover {
   .interruptor-bola svg {
     transition: none;
   }
+}
+
+/* Menu principal */
+.menu {
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borda);
+}
+
+.menu .miolo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.5rem;
+}
+
+.menu a {
+  padding: 0.6rem 0.75rem 0.5rem;
+  border-bottom: 3px solid transparent;
+  color: var(--texto-2);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  color: var(--texto);
+}
+
+.menu a[aria-current="page"] {
+  border-bottom-color: var(--accent);
+  color: var(--accent-texto);
 }
 
 .rodape {
@@ -817,5 +848,306 @@ a:hover {
     width: 2.75rem;
     height: 2.75rem;
     font-size: 1.2rem;
+  }
+}
+
+/* Linha de tempo dos mandatos */
+.linha-ferramentas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.botao {
+  padding: 0.45rem 0.95rem;
+  background: var(--superficie);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent-texto);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao:hover {
+  background: var(--accent-suave);
+}
+
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--texto-2);
+  font-size: 0.85rem;
+}
+
+.legenda li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.legenda-cor {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  background: var(--cor);
+  box-shadow: 0 0 0 1px var(--cor-vista);
+}
+
+.legenda-vago,
+.bloco-vago {
+  background: repeating-linear-gradient(135deg, var(--pista) 0 5px, transparent 5px 10px);
+  border: 1px dashed var(--texto-2);
+}
+
+.legenda-sem-registo,
+.bloco-sem-registo {
+  background: transparent;
+  border: 1px dashed var(--texto-2);
+}
+
+.linha {
+  --topo-alt: 4.25rem;
+  min-width: 44rem;
+}
+
+.linha-topo,
+.linha-corpo {
+  display: grid;
+  grid-template-columns: var(--colunas);
+  column-gap: 0.75rem;
+}
+
+.linha-topo {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  height: var(--topo-alt);
+  background: var(--fundo);
+  border-bottom: 2px solid var(--accent);
+}
+
+.cargo-titulo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  padding-bottom: 0.4rem;
+  text-align: center;
+}
+
+.cargo-nome {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.cargo-sub {
+  margin-top: 0.1rem;
+  color: var(--texto-2);
+  font-size: 0.7rem;
+  line-height: 1.2;
+}
+
+.linha-corpo {
+  position: relative;
+  padding-bottom: 2.5rem;
+}
+
+.guias {
+  position: absolute;
+  top: 0;
+  left: var(--eixo);
+  right: 0;
+  height: var(--altura);
+  pointer-events: none;
+}
+
+.guia {
+  position: absolute;
+  top: var(--t);
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--borda);
+}
+
+.guia-hoje {
+  border-top: 2px dashed var(--accent);
+}
+
+.eixo {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  height: var(--altura);
+  background: var(--fundo);
+}
+
+.eixo-ano,
+.eixo-hoje {
+  position: absolute;
+  top: var(--t);
+  left: 0;
+  padding-top: 0.2rem;
+  color: var(--texto-2);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.eixo-hoje {
+  color: var(--accent-texto);
+}
+
+.cargo {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.faixas {
+  display: grid;
+  grid-template-columns: repeat(var(--n, 1), minmax(0, 1fr));
+  gap: 0.15rem;
+  height: var(--altura);
+}
+
+.faixa {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--faixa);
+  border-radius: 0.4rem;
+}
+
+.bloco {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--t) + 1px);
+  height: calc(var(--a) - 2px);
+  border-radius: 0.4rem;
+}
+
+.bloco.partido {
+  background: var(--fundo-bloco, var(--cor));
+  box-shadow: 0 0 0 1px var(--cor-vista);
+  color: var(--sobre-cor, #ffffff);
+}
+
+.bloco-rotulo {
+  position: sticky;
+  top: calc(var(--topo-alt) + 0.4rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.5rem 0.3rem;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.bloco-nome {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+a.bloco-nome {
+  color: inherit;
+  text-decoration-thickness: 1px;
+}
+
+.bloco-partido,
+.data {
+  font-size: 0.75rem;
+}
+
+.data {
+  display: block;
+}
+
+.bloco-datas {
+  margin-top: 0.2rem;
+}
+
+.bloco .foto {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 0.2rem;
+  box-shadow: 0 0 0 2px var(--sobre-cor, #ffffff);
+  font-size: 1.05rem;
+}
+
+.denso-medio .bloco-rotulo {
+  padding-top: 0.3rem;
+}
+
+.denso-linha .bloco-rotulo {
+  display: block;
+  padding: 0.1rem 0.3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.denso-linha .bloco-nome {
+  font-size: 0.78rem;
+}
+
+.denso-linha .bloco-partido {
+  margin-left: 0.25rem;
+  font-size: 0.7rem;
+}
+
+.bloco.mista .bloco-rotulo {
+  margin: 0.3rem;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 0.35rem;
+  color: #ffffff;
+}
+
+.bloco.mista .foto {
+  box-shadow: 0 0 0 2px #ffffff;
+}
+
+.bloco-vago .bloco-rotulo,
+.bloco-sem-registo .bloco-rotulo {
+  width: fit-content;
+  max-width: calc(100% - 0.6rem);
+  margin: 0.4rem auto 0;
+  padding: 0.15rem 0.6rem;
+  background: var(--superficie);
+  border-radius: 999px;
+  color: var(--texto-2);
+}
+
+.bloco-vago .bloco-nome,
+.bloco-sem-registo .bloco-nome {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.nota {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 46rem) {
+  .linha-janela {
+    max-height: 80vh;
+    max-height: 80dvh;
+    overflow: auto;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
   }
 }
