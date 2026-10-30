@@ -896,8 +896,7 @@ a:hover {
   width: 0.9rem;
   height: 0.9rem;
   border-radius: 50%;
-  background: var(--cor);
-  box-shadow: 0 0 0 1px var(--cor-vista);
+  background: var(--cor-vista);
 }
 
 .legenda-vago,
@@ -914,14 +913,14 @@ a:hover {
 
 .linha {
   --topo-alt: 4.25rem;
-  min-width: 44rem;
+  min-width: 48rem;
 }
 
 .linha-topo,
 .linha-corpo {
   display: grid;
   grid-template-columns: var(--colunas);
-  column-gap: 0.75rem;
+  column-gap: 1.5rem;
 }
 
 .linha-topo {
@@ -1039,9 +1038,25 @@ a:hover {
 }
 
 .bloco.partido {
-  background: var(--fundo-bloco, var(--cor));
-  box-shadow: 0 0 0 1px var(--cor-vista);
-  color: var(--sobre-cor, #ffffff);
+  --texto-barra: var(--sobre-cor, #ffffff);
+  background: var(--fundo-bloco, var(--cor-vista));
+  color: var(--texto-barra);
+}
+
+:root[data-tema="escuro"] .bloco.partido {
+  --texto-barra: var(--sobre-cor-vista, var(--sobre-cor, #ffffff));
+}
+
+.bloco.mista {
+  --vista-1: var(--cor-1);
+  --vista-2: var(--cor-2);
+}
+
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  :root[data-tema="escuro"] .bloco.mista {
+    --vista-1: color-mix(in srgb, var(--cor-1) 75%, #ffffff);
+    --vista-2: color-mix(in srgb, var(--cor-2) 75%, #ffffff);
+  }
 }
 
 .bloco-rotulo {
@@ -1084,7 +1099,7 @@ a.bloco-nome {
   width: 2.5rem;
   height: 2.5rem;
   margin-bottom: 0.2rem;
-  box-shadow: 0 0 0 2px var(--sobre-cor, #ffffff);
+  box-shadow: 0 0 0 2px var(--texto-barra, #ffffff);
   font-size: 1.05rem;
 }
 
@@ -1109,17 +1124,6 @@ a.bloco-nome {
   font-size: 0.7rem;
 }
 
-.bloco.mista .bloco-rotulo {
-  margin: 0.3rem;
-  background: rgba(0, 0, 0, 0.55);
-  border-radius: 0.35rem;
-  color: #ffffff;
-}
-
-.bloco.mista .foto {
-  box-shadow: 0 0 0 2px #ffffff;
-}
-
 .bloco-vago .bloco-rotulo,
 .bloco-sem-registo .bloco-rotulo {
   width: fit-content;
@@ -1142,7 +1146,7 @@ a.bloco-nome {
   font-size: 0.9rem;
 }
 
-@media (max-width: 46rem) {
+@media (max-width: 50rem) {
   .linha-janela {
     max-height: 80vh;
     max-height: 80dvh;

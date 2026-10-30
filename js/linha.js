@@ -1,4 +1,4 @@
-import { avatar, colorir } from "./componentes.js";
+import { avatar, clarear, colorir, corSobre } from "./componentes.js";
 import { h } from "./dom.js";
 import { dataAbreviada, mesAno } from "./formato.js";
 import { diasDe } from "./mandatos.js";
@@ -6,6 +6,7 @@ import { diasDe } from "./mandatos.js";
 const REM_POR_ANO = 18;
 const REM_POR_DIA = REM_POR_ANO / 365.25;
 const LARGURA_EIXO = "3rem";
+const MEIA_TRANSICAO = 1.1;
 const TITULO = "Linha de tempo dos mandatos";
 
 function posicionar(no, dias, inicio) {
@@ -22,8 +23,9 @@ function densidade(altura) {
 }
 
 function datasDe(b) {
-  const formato = b.mensal ? mesAno : dataAbreviada;
-  return [formato(b.de), b.ate ? `até ${formato(b.ate)}` : "até à atualidade"];
+  const inicio = b.mensal ? mesAno(b.de) : dataAbreviada(b.de);
+  if (!b.ate) return [inicio, "até à atualidade"];
+  return [inicio, `até ${b.fimMensal ? mesAno(b.ate) : dataAbreviada(b.ate)}`];
 }
 
 function textoPartido(b) {
@@ -58,6 +60,13 @@ function rotulo(b, dens) {
   );
 }
 
+// Transição curta, centrada na data da mudança.
+function gradiente(b, de) {
+  if (!b.mudanca) return "linear-gradient(to bottom, var(--vista-1), var(--vista-2))";
+  const ponto = (diasDe(b.mudanca) - de) * REM_POR_DIA;
+  return `linear-gradient(to bottom, var(--vista-1) ${ponto - MEIA_TRANSICAO}rem, var(--vista-2) ${ponto + MEIA_TRANSICAO}rem)`;
+}
+
 function bloco(b, inicio, hoje) {
   const de = diasDe(b.de);
   if (de >= hoje) return null;
@@ -74,7 +83,10 @@ function bloco(b, inicio, hoje) {
     colorir(no, b.cores[0] || null);
     if (b.cores.length > 1) {
       no.classList.add("mista");
-      no.style.setProperty("--fundo-bloco", `linear-gradient(to bottom, ${b.cores.join(", ")})`);
+      b.cores.forEach((cor, i) => no.style.setProperty(`--cor-${i + 1}`, cor));
+      no.style.setProperty("--fundo-bloco", gradiente(b, de));
+      no.style.setProperty("--sobre-cor", corSobre(b.cores));
+      no.style.setProperty("--sobre-cor-vista", corSobre(b.cores.map(clarear)));
     }
   }
   no.append(rotulo(b, dens));
@@ -172,7 +184,7 @@ export function paginaMandatos(dados) {
   linha.style.setProperty("--eixo", LARGURA_EIXO);
   linha.style.setProperty("--colunas", `${LARGURA_EIXO} ${m.cargos.map((c) => `minmax(0, ${c.faixas.length}fr)`).join(" ")}`);
 
-  const estreito = window.matchMedia("(max-width: 46rem)").matches;
+  const estreito = window.matchMedia("(max-width: 50rem)").matches;
   const janela = h(
     "div",
     { class: "linha-janela", role: estreito ? "region" : null, "aria-label": estreito ? TITULO : null, tabindex: estreito ? "0" : null },
@@ -195,7 +207,7 @@ export function paginaMandatos(dados) {
     h(
       "p",
       { class: "nota muted" },
-      "O Porta-Voz vem das eleições registadas, com precisão de mês. Cada mandato dura até à eleição seguinte e o da última eleição registada termina em abril ou outubro.",
+      "O Porta-Voz vem das eleições registadas: cada mandato dura até à eleição seguinte e o da última eleição registada termina em abril ou outubro.",
     ),
   );
   return { titulo: TITULO, no };

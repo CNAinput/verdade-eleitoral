@@ -93,10 +93,9 @@ function validarEleicao(e, tipos, partidos, respostas, problemas) {
   if (!tipo) erro(`tipo "${e.tipo}" não existe em "tipos"`);
   if (!Number.isInteger(e.ano)) erro("ano inválido");
   if (e.data !== undefined) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(e.data)) erro("data inválida");
+    if (!dataValida(e.data)) erro("data inválida");
     else if (Number(e.data.slice(0, 4)) !== e.ano) erro("a data não é do ano indicado");
   }
-  if (e.mes !== undefined && !(Number.isInteger(e.mes) && e.mes >= 1 && e.mes <= 12)) erro("mês inválido");
   if (e.sistema !== undefined && e.sistema !== "pontos" && e.sistema !== "votos") erro(`sistema "${e.sistema}" desconhecido`);
   if (tipo && tipo.formato === "opcoes") validarOpcoes(e, respostas, erro);
   else if (e.sistema === "votos") {
@@ -133,9 +132,14 @@ function validarBloco(b, partidos, erro) {
   }
   if (!b.nome) erro("mandato sem nome");
   const siglas = Array.isArray(b.partido) ? b.partido : b.partido ? [b.partido] : [];
-  if (Array.isArray(b.partido) && siglas.length === 0) erro(`${b.nome}: lista de partidos vazia`);
+  if (Array.isArray(b.partido) && siglas.length !== 2) erro(`${b.nome}: a lista de partidos pede dois`);
   for (const sigla of siglas) {
     if (!partidos[sigla]) erro(`${b.nome}: partido ${sigla} sem cor em "partidos"`);
+  }
+  if (b.mudanca !== undefined) {
+    if (siglas.length !== 2) erro(`${b.nome}: mudanca pede dois partidos`);
+    if (!dataValida(b.mudanca)) erro(`${b.nome}: data da mudança inválida`);
+    else if (b.mudanca <= b.de || (b.ate && b.mudanca >= b.ate)) erro(`${b.nome}: mudança fora do mandato`);
   }
 }
 
@@ -158,7 +162,7 @@ function validarCargo(c, bruto, erro) {
     const lista = (bruto.eleicoes || []).filter((e) => e.tipo === c.eleicoes);
     if (lista.length === 0) erro("sem eleições deste tipo");
     for (const e of lista) {
-      if (!Number.isInteger(e.mes)) erro(`${e.id}: falta o mês da eleição`);
+      if (!dataValida(e.data)) erro(`${e.id}: falta a data da eleição`);
     }
     return;
   }

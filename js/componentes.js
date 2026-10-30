@@ -43,13 +43,25 @@ function textoValor(c, campo, unidade, base) {
   return `${inteiro(c[campo])} ${plural(c[campo], unidade)} (${percentagem(c[campo], base)})`;
 }
 
-// Texto claro ou escuro, conforme o contraste.
-function corSobre(hex) {
+function luminancia(hex) {
   const [r, g, b] = [1, 3, 5]
     .map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
     .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
-  const luminancia = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-  return 1.05 / (luminancia + 0.05) >= 4.5 ? "#ffffff" : "#111611";
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+// Como a cor fica no tema escuro.
+export function clarear(hex) {
+  const canais = [1, 3, 5].map((i) => Math.round(parseInt(hex.slice(i, i + 2), 16) * 0.75 + 255 * 0.25));
+  return `#${canais.map((c) => c.toString(16).padStart(2, "0")).join("")}`;
+}
+
+// Texto claro ou escuro, o mais legível.
+export function corSobre(cores) {
+  const escuro = luminancia("#111611");
+  const branco = Math.min(...cores.map((c) => 1.05 / (luminancia(c) + 0.05)));
+  const preto = Math.min(...cores.map((c) => (luminancia(c) + 0.05) / (escuro + 0.05)));
+  return branco >= preto ? "#ffffff" : "#111611";
 }
 
 // Aplica a cor do partido ao elemento.
@@ -57,7 +69,8 @@ export function colorir(elemento, cor) {
   elemento.classList.add("partido");
   if (!cor) return;
   elemento.style.setProperty("--cor", cor);
-  elemento.style.setProperty("--sobre-cor", corSobre(cor));
+  elemento.style.setProperty("--sobre-cor", corSobre([cor]));
+  elemento.style.setProperty("--sobre-cor-vista", corSobre([clarear(cor)]));
 }
 
 // Distingue segmentos vizinhos com a mesma cor.

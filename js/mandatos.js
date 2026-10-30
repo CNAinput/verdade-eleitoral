@@ -10,7 +10,8 @@ function isoDe(ano, mes) {
 }
 
 // Próximo abril ou outubro depois da eleição.
-function fimPrevisto(ano, mes) {
+function fimPrevisto(data) {
+  const [ano, mes] = data.split("-").map(Number);
   if (mes < 4) return isoDe(ano, 4);
   if (mes < 10) return isoDe(ano, 10);
   return isoDe(ano + 1, 4);
@@ -28,10 +29,12 @@ function pessoa(b, contexto) {
     nome: b.nome,
     partidos,
     cores: partidos.map((sigla) => (contexto.partidos[sigla] || {}).cor).filter(Boolean),
+    mudanca: b.mudanca || null,
     foto: contexto.fotos[b.nome] || null,
     de: b.de,
     ate: b.ate || null,
     mensal: Boolean(b.mensal),
+    fimMensal: Boolean(b.fimMensal),
     ligacao: b.ligacao || null,
     eleicao: b.eleicao || null,
   };
@@ -44,16 +47,16 @@ function faixaManual(blocos, contexto) {
 // Cada eleição vale até à seguinte.
 function faixaDeEleicoes(tipo, contexto) {
   const lista = contexto.eleicoes
-    .filter((e) => e.tipo === tipo && e.mes && e.eleitos.length > 0)
-    .sort((a, b) => a.ano * 12 + a.mes - (b.ano * 12 + b.mes) || b.posicao - a.posicao);
+    .filter((e) => e.tipo === tipo && e.data && e.eleitos.length > 0)
+    .sort((a, b) => a.data.localeCompare(b.data) || b.posicao - a.posicao);
   const blocos = lista.map((e, i) => {
     const seguinte = lista[i + 1];
     return pessoa(
       {
         ...e.eleitos[0],
-        de: isoDe(e.ano, e.mes),
-        ate: seguinte ? isoDe(seguinte.ano, seguinte.mes) : fimPrevisto(e.ano, e.mes),
-        mensal: true,
+        de: e.data,
+        ate: seguinte ? seguinte.data : fimPrevisto(e.data),
+        fimMensal: !seguinte,
         ligacao: `#/eleicao/${e.id}`,
         eleicao: e.titulo,
       },
