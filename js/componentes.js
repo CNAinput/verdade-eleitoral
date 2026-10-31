@@ -222,6 +222,18 @@ export function divisao(e) {
   return h("div", { class: "divisao-caixa" }, h("div", { class: "divisao", "aria-hidden": "true" }, segmentosDe(itens)), marcaMaioria(false));
 }
 
+// Os dois primeiros e o valor a mostrar.
+export function principaisDe(e) {
+  const campo = campoPrincipal(e);
+  const base = total(e, campo);
+  return ordenados(e, campo)
+    .slice(0, 2)
+    .map((candidato) => ({
+      candidato,
+      valor: e.sistema === "votos" ? percentagem(candidato.votos, base) : `${inteiro(candidato.pontos)} pts`,
+    }));
+}
+
 // Visão de uma volta como eleição.
 export function vistaRonda(e, ronda) {
   return { ...e, candidatos: ronda.candidatos, outros: ronda.outros, inscritos: ronda.inscritos };

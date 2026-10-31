@@ -3,6 +3,7 @@
     {
       "id": "presidente",
       "nome": "Presidente",
+      "cartoes": { "eleicoes": "presidenciais", "lado": "esquerda" },
       "faixas": [
         [
           { "nome": "edulis1", "partido": "Ind", "de": "2020-12-14", "ate": "2023-01-10" },
@@ -47,6 +48,7 @@
     {
       "id": "procurador",
       "nome": "Procurador",
+      "cartoes": { "eleicoes": "portavoz", "lado": "dentro" },
       "faixas": [[{ "nome": "GamerA21", "partido": "Ind", "de": "2025-08-26", "ate": null }]]
     }
   ]

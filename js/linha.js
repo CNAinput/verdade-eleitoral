@@ -1,12 +1,12 @@
-import { avatar, clarear, colorir, corSobre } from "./componentes.js";
+import { avatar, clarear, colorir, corSobre, principaisDe } from "./componentes.js";
 import { h } from "./dom.js";
 import { dataAbreviada, mesAno } from "./formato.js";
 import { diasDe } from "./mandatos.js";
 
-const REM_POR_ANO = 18;
+const REM_POR_ANO = 24;
 const REM_POR_DIA = REM_POR_ANO / 365.25;
 const LARGURA_EIXO = "3rem";
-const MEIA_TRANSICAO = 1.1;
+const MEIA_TRANSICAO_DIAS = 22;
 const TITULO = "Linha de tempo dos mandatos";
 
 function posicionar(no, dias, inicio) {
@@ -64,7 +64,8 @@ function rotulo(b, dens) {
 function gradiente(b, de) {
   if (!b.mudanca) return "linear-gradient(to bottom, var(--vista-1), var(--vista-2))";
   const ponto = (diasDe(b.mudanca) - de) * REM_POR_DIA;
-  return `linear-gradient(to bottom, var(--vista-1) ${ponto - MEIA_TRANSICAO}rem, var(--vista-2) ${ponto + MEIA_TRANSICAO}rem)`;
+  const meia = MEIA_TRANSICAO_DIAS * REM_POR_DIA;
+  return `linear-gradient(to bottom, var(--vista-1) ${ponto - meia}rem, var(--vista-2) ${ponto + meia}rem)`;
 }
 
 function bloco(b, inicio, hoje) {
@@ -93,6 +94,49 @@ function bloco(b, inicio, hoje) {
   return no;
 }
 
+const temAr = (c) => Boolean(c.cartoes && c.cartoes.lado === "esquerda");
+
+// Avatar e valor de um candidato.
+function pessoaDoCartao({ candidato, valor }) {
+  return h(
+    "span",
+    { class: ["cartao-pessoa", candidato.eleito && "eleito"], title: `${candidato.nome}: ${valor}` },
+    avatar(candidato),
+    h("span", { class: "cartao-valor" }, valor),
+  );
+}
+
+// Cartão com os dois primeiros.
+function cartao(e) {
+  const data = dataAbreviada(e.data);
+  const principais = principaisDe(e);
+  const resumo = principais.map((p) => `${p.candidato.nome} ${p.valor}`).join(", ");
+  return h(
+    "a",
+    {
+      class: "cartao",
+      href: `#/eleicao/${e.id}`,
+      title: `${e.titulo}: ${data}`,
+      "aria-label": `${e.titulo}, ${data}: ${resumo}. Ver o resultado`,
+    },
+    h("span", { class: "cartao-nome" }, e.titulo),
+    h("span", { class: "cartao-pessoas" }, principais.map(pessoaDoCartao)),
+  );
+}
+
+// Um cartão por eleição, à altura da data.
+function cartoes(spec, inicio, hoje) {
+  const itens = spec.itens
+    .filter((e) => diasDe(e.data) < hoje)
+    .map((e) => posicionar(h("li", { class: "cartao-item" }, h("span", { class: "cartao-fio", "aria-hidden": "true" }), cartao(e)), diasDe(e.data), inicio));
+  return h("ul", { class: ["cartoes", `lado-${spec.lado}`], "aria-label": "Eleições" }, itens);
+}
+
+// Espaço sem cargo, só para cartões.
+function ar(c, inicio, hoje) {
+  return h("div", { class: "ar" }, cartoes(c.cartoes, inicio, hoje));
+}
+
 function cargo(c, inicio, hoje) {
   const faixas = h("div", { class: "faixas" });
   faixas.style.setProperty("--n", String(c.faixas.length));
@@ -105,7 +149,7 @@ function cargo(c, inicio, hoje) {
       ),
     );
   });
-  return h("section", { class: "cargo", "aria-label": c.nome }, faixas);
+  return h("section", { class: "cargo", "aria-label": c.nome }, faixas, c.cartoes && c.cartoes.lado === "dentro" && cartoes(c.cartoes, inicio, hoje));
 }
 
 function topo(cargos) {
@@ -113,9 +157,10 @@ function topo(cargos) {
     "div",
     { class: "linha-topo", "aria-hidden": "true" },
     h("span", { class: "linha-canto" }),
-    cargos.map((c) =>
+    cargos.flatMap((c) => [
+      temAr(c) && h("span", { class: "linha-ar" }),
       h("div", { class: "cargo-titulo" }, h("span", { class: "cargo-nome" }, c.nome), c.subtitulo && h("small", { class: "cargo-sub" }, c.subtitulo)),
-    ),
+    ]),
   );
 }
 
@@ -178,13 +223,14 @@ export function paginaMandatos(dados) {
     "div",
     { class: "linha" },
     topo(m.cargos),
-    h("div", { class: "linha-corpo" }, guias, coluna, m.cargos.map((c) => cargo(c, inicio, hoje))),
+    h("div", { class: "linha-corpo" }, guias, coluna, m.cargos.flatMap((c) => [temAr(c) && ar(c, inicio, hoje), cargo(c, inicio, hoje)])),
   );
   linha.style.setProperty("--altura", `${(hoje - inicio) * REM_POR_DIA}rem`);
   linha.style.setProperty("--eixo", LARGURA_EIXO);
-  linha.style.setProperty("--colunas", `${LARGURA_EIXO} ${m.cargos.map((c) => `minmax(0, ${c.faixas.length}fr)`).join(" ")}`);
+  const trilhos = m.cargos.map((c) => `${temAr(c) ? "minmax(0, 1fr) " : ""}minmax(0, ${c.faixas.length}fr)`);
+  linha.style.setProperty("--colunas", `${LARGURA_EIXO} ${trilhos.join(" ")}`);
 
-  const estreito = window.matchMedia("(max-width: 50rem)").matches;
+  const estreito = window.matchMedia("(max-width: 54rem)").matches;
   const janela = h(
     "div",
     { class: "linha-janela", role: estreito ? "region" : null, "aria-label": estreito ? TITULO : null, tabindex: estreito ? "0" : null },
@@ -207,7 +253,7 @@ export function paginaMandatos(dados) {
     h(
       "p",
       { class: "nota muted" },
-      "O Porta-Voz vem das eleições registadas: cada mandato dura até à eleição seguinte e o da última eleição registada termina em abril ou outubro.",
+      "Os cartões assinalam o dia de cada eleição presidencial e de Porta-Voz, com os dois primeiros. O Porta-Voz vem das eleições registadas: cada mandato dura até à eleição seguinte e o da última eleição registada termina em abril ou outubro.",
     ),
   );
   return { titulo: TITULO, no };

@@ -153,17 +153,33 @@ function validarFaixa(faixa, partidos, erro) {
   });
 }
 
+function validarDatasDoTipo(tipo, bruto, erro) {
+  if (!(bruto.tipos || {})[tipo]) return erro(`tipo "${tipo}" não existe em "tipos"`);
+  const lista = (bruto.eleicoes || []).filter((e) => e.tipo === tipo);
+  if (lista.length === 0) erro("sem eleições deste tipo");
+  for (const e of lista) {
+    if (!dataValida(e.data)) erro(`${e.id}: falta a data da eleição`);
+  }
+}
+
+function validarCartoes(c, bruto, erro) {
+  const spec = c.cartoes;
+  if (!spec || typeof spec !== "object") return erro("cartoes inválido");
+  if (spec.lado !== "esquerda" && spec.lado !== "dentro") erro(`cartoes: lado "${spec.lado}" desconhecido`);
+  validarDatasDoTipo(spec.eleicoes, bruto, erro);
+  if (spec.lado !== "dentro" || !Array.isArray(c.faixas)) return;
+  const inicios = c.faixas.flat().map((b) => b.de).filter(Boolean).sort();
+  const sobrepostas = (bruto.eleicoes || []).filter((e) => e.tipo === spec.eleicoes && inicios.length > 0 && e.data >= inicios[0]);
+  for (const e of sobrepostas) erro(`${e.id}: o cartão cai sobre uma barra`);
+}
+
 function validarCargo(c, bruto, erro) {
   if (!c.nome) erro("cargo sem nome");
   const partidos = bruto.partidos || {};
+  if (c.cartoes !== undefined) validarCartoes(c, bruto, erro);
   if (c.eleicoes !== undefined) {
     if (c.faixas !== undefined) erro("cargo com faixas e eleicoes");
-    if (!(bruto.tipos || {})[c.eleicoes]) return erro(`tipo "${c.eleicoes}" não existe em "tipos"`);
-    const lista = (bruto.eleicoes || []).filter((e) => e.tipo === c.eleicoes);
-    if (lista.length === 0) erro("sem eleições deste tipo");
-    for (const e of lista) {
-      if (!dataValida(e.data)) erro(`${e.id}: falta a data da eleição`);
-    }
+    validarDatasDoTipo(c.eleicoes, bruto, erro);
     return;
   }
   const faixas = Array.isArray(c.faixas) ? c.faixas : [];

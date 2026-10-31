@@ -70,6 +70,13 @@ function faixaDeEleicoes(tipo, contexto) {
   return blocos;
 }
 
+// Eleições do tipo que levam cartão.
+function cartoesDe(spec, contexto) {
+  if (!spec) return null;
+  const itens = contexto.eleicoes.filter((e) => e.tipo === spec.eleicoes && e.data);
+  return { lado: spec.lado, itens };
+}
+
 // Normaliza os blocos de cada cargo.
 export function prepararMandatos(bruto, contexto) {
   const cargos = (bruto.cargos || []).map((c) => ({
@@ -77,6 +84,7 @@ export function prepararMandatos(bruto, contexto) {
     nome: c.nome,
     subtitulo: c.subtitulo || null,
     faixas: c.eleicoes ? [faixaDeEleicoes(c.eleicoes, contexto)] : (c.faixas || []).map((f) => faixaManual(f, contexto)),
+    cartoes: cartoesDe(c.cartoes, contexto),
   }));
   const inicios = cargos.flatMap((c) => c.faixas.flat()).map((b) => b.de).sort();
   return { cargos, primeiro: inicios[0] || null, hoje: contexto.hoje };

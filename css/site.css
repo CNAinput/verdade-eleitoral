@@ -912,8 +912,8 @@ a:hover {
 }
 
 .linha {
-  --topo-alt: 4.25rem;
-  min-width: 48rem;
+  --topo-alt: 5.5rem;
+  min-width: 52rem;
 }
 
 .linha-topo,
@@ -944,7 +944,7 @@ a:hover {
 
 .cargo-nome {
   font-family: var(--serif);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
   line-height: 1.15;
 }
@@ -1141,12 +1141,127 @@ a.bloco-nome {
   font-weight: 600;
 }
 
+/* Cartões das eleições */
+.ar {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  height: var(--altura);
+}
+
+.cartoes {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+.cartao-item {
+  position: absolute;
+  top: var(--t);
+  left: 0;
+  right: 0;
+  height: 0;
+}
+
+.cartao {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem 0.2rem;
+  background: var(--superficie);
+  border: 1px solid var(--texto-2);
+  border-radius: 0.4rem;
+  box-shadow: var(--sombra);
+  color: var(--texto);
+  text-align: center;
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+.cartao:hover {
+  background: var(--accent-suave);
+}
+
+.cartao-nome {
+  font-family: var(--serif);
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.cartao-pessoas {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.cartao-pessoa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.cartao .foto {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.7rem;
+  box-shadow: 0 0 0 2px var(--cor-vista, var(--outros));
+}
+
+.cartao-pessoa.eleito .foto {
+  box-shadow: 0 0 0 2px var(--superficie), 0 0 0 4px var(--accent);
+}
+
+.cartao-valor {
+  font-size: 0.65rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.cartao-pessoa.eleito .cartao-valor {
+  color: var(--accent-texto);
+  font-weight: 700;
+}
+
+.cartao-fio {
+  position: absolute;
+  top: 0;
+  width: 1.5rem;
+  height: 2px;
+  transform: translateY(-50%);
+  background: var(--texto);
+  box-shadow: 0 0 0 1px var(--superficie);
+  border-radius: 1px;
+}
+
+.lado-dentro .cartao-fio {
+  right: 100%;
+}
+
+.lado-esquerda .cartao-fio {
+  left: 100%;
+}
+
 .nota {
   margin-top: 1rem;
   font-size: 0.9rem;
 }
 
-@media (max-width: 50rem) {
+@media (max-width: 54rem) {
+  .linha {
+    --topo-alt: 6.25rem;
+  }
+
   .linha-janela {
     max-height: 80vh;
     max-height: 80dvh;
