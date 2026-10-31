@@ -97,44 +97,44 @@ function bloco(b, inicio, hoje) {
 const temAr = (c) => Boolean(c.cartoes && c.cartoes.lado === "esquerda");
 
 // Avatar e valor de um candidato.
-function pessoaDoCartao({ candidato, valor }) {
+function pessoaDoMarco({ candidato, valor }) {
   return h(
     "span",
-    { class: ["cartao-pessoa", candidato.eleito && "eleito"], title: `${candidato.nome}: ${valor}` },
+    { class: ["marco-pessoa", candidato.eleito && "eleito"], title: `${candidato.nome}: ${valor}` },
     avatar(candidato),
-    h("span", { class: "cartao-valor" }, valor),
+    h("span", { class: "marco-valor" }, valor),
   );
 }
 
-// Cartão com os dois primeiros.
-function cartao(e) {
+// Marco com os dois primeiros.
+function marco(e) {
   const data = dataAbreviada(e.data);
   const principais = principaisDe(e);
   const resumo = principais.map((p) => `${p.candidato.nome} ${p.valor}`).join(", ");
   return h(
     "a",
     {
-      class: "cartao",
+      class: "marco",
       href: `#/eleicao/${e.id}`,
       title: `${e.titulo}: ${data}`,
       "aria-label": `${e.titulo}, ${data}: ${resumo}. Ver o resultado`,
     },
-    h("span", { class: "cartao-nome" }, e.titulo),
-    h("span", { class: "cartao-pessoas" }, principais.map(pessoaDoCartao)),
+    h("span", { class: "marco-nome" }, e.titulo),
+    h("span", { class: "marco-pessoas" }, principais.map(pessoaDoMarco)),
   );
 }
 
-// Um cartão por eleição, à altura da data.
-function cartoes(spec, inicio, hoje) {
+// Um marco por eleição, à altura da data.
+function marcos(spec, inicio, hoje) {
   const itens = spec.itens
     .filter((e) => diasDe(e.data) < hoje)
-    .map((e) => posicionar(h("li", { class: "cartao-item" }, h("span", { class: "cartao-fio", "aria-hidden": "true" }), cartao(e)), diasDe(e.data), inicio));
-  return h("ul", { class: ["cartoes", `lado-${spec.lado}`], "aria-label": "Eleições" }, itens);
+    .map((e) => posicionar(h("li", { class: "marco-item" }, h("span", { class: "marco-fio", "aria-hidden": "true" }), marco(e)), diasDe(e.data), inicio));
+  return h("ul", { class: ["marcos", `lado-${spec.lado}`], "aria-label": "Eleições" }, itens);
 }
 
-// Espaço sem cargo, só para cartões.
+// Espaço sem cargo, só para marcos.
 function ar(c, inicio, hoje) {
-  return h("div", { class: "ar" }, cartoes(c.cartoes, inicio, hoje));
+  return h("div", { class: "ar" }, marcos(c.cartoes, inicio, hoje));
 }
 
 function cargo(c, inicio, hoje) {
@@ -149,7 +149,7 @@ function cargo(c, inicio, hoje) {
       ),
     );
   });
-  return h("section", { class: "cargo", "aria-label": c.nome }, faixas, c.cartoes && c.cartoes.lado === "dentro" && cartoes(c.cartoes, inicio, hoje));
+  return h("section", { class: "cargo", "aria-label": c.nome }, faixas, c.cartoes && c.cartoes.lado === "dentro" && marcos(c.cartoes, inicio, hoje));
 }
 
 function topo(cargos) {

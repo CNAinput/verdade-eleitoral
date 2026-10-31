@@ -1141,7 +1141,7 @@ a.bloco-nome {
   font-weight: 600;
 }
 
-/* Cartões das eleições */
+/* Marcos das eleições na linha */
 .ar {
   position: relative;
   z-index: 1;
@@ -1149,7 +1149,7 @@ a.bloco-nome {
   height: var(--altura);
 }
 
-.cartoes {
+.marcos {
   position: absolute;
   inset: 0;
   margin: 0;
@@ -1158,7 +1158,7 @@ a.bloco-nome {
   pointer-events: none;
 }
 
-.cartao-item {
+.marco-item {
   position: absolute;
   top: var(--t);
   left: 0;
@@ -1166,7 +1166,7 @@ a.bloco-nome {
   height: 0;
 }
 
-.cartao {
+.marco {
   position: absolute;
   top: 0;
   left: 0;
@@ -1187,53 +1187,53 @@ a.bloco-nome {
   pointer-events: auto;
 }
 
-.cartao:hover {
+.marco:hover {
   background: var(--accent-suave);
 }
 
-.cartao-nome {
+.marco-nome {
   font-family: var(--serif);
   font-size: 0.6rem;
   font-weight: 700;
   line-height: 1.1;
 }
 
-.cartao-pessoas {
+.marco-pessoas {
   display: flex;
   justify-content: space-around;
   width: 100%;
 }
 
-.cartao-pessoa {
+.marco-pessoa {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.15rem;
 }
 
-.cartao .foto {
+.marco .foto {
   width: 1.5rem;
   height: 1.5rem;
   font-size: 0.7rem;
   box-shadow: 0 0 0 2px var(--cor-vista, var(--outros));
 }
 
-.cartao-pessoa.eleito .foto {
+.marco-pessoa.eleito .foto {
   box-shadow: 0 0 0 2px var(--superficie), 0 0 0 4px var(--accent);
 }
 
-.cartao-valor {
+.marco-valor {
   font-size: 0.65rem;
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 
-.cartao-pessoa.eleito .cartao-valor {
+.marco-pessoa.eleito .marco-valor {
   color: var(--accent-texto);
   font-weight: 700;
 }
 
-.cartao-fio {
+.marco-fio {
   position: absolute;
   top: 0;
   width: 1.5rem;
@@ -1244,11 +1244,11 @@ a.bloco-nome {
   border-radius: 1px;
 }
 
-.lado-dentro .cartao-fio {
+.lado-dentro .marco-fio {
   right: 100%;
 }
 
-.lado-esquerda .cartao-fio {
+.lado-esquerda .marco-fio {
   left: 100%;
 }
 
