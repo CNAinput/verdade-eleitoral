@@ -39,6 +39,21 @@
   },
   "eleicoes": [
     {
+      "id": "referendo-2026-11-07",
+      "tipo": "referendo",
+      "ano": 2026,
+      "data": "2026-11-07",
+      "pergunta": "Devem as futuras votações, como referendos, e eleições, como as Eleições Presidenciais, usar o CNA Portal como urna primária?",
+      "opcoes": [
+        { "nome": "Sim", "votos": 5 },
+        { "nome": "Não", "votos": 3 },
+        { "nome": "Em branco", "votos": 0, "branco": true }
+      ],
+      "notas": [
+        "Participação de 72,7% da população (8 de 11 cidadãos ativos): o resultado é vinculativo."
+      ]
+    },
+    {
       "id": "presidenciais-2026",
       "tipo": "presidenciais",
       "ano": 2026,
